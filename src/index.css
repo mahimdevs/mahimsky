@@ -6,51 +6,51 @@
 
 @layer base {
   :root {
-    /* Core colors - deep charcoal theme */
-    --background: 240 10% 4%;
-    --foreground: 0 0% 90%;
+    /* Core colors - Clean White theme */
+    --background: 0 0% 99%;
+    --foreground: 220 15% 15%;
 
-    --card: 240 10% 7%;
-    --card-foreground: 0 0% 90%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 15%;
 
-    --popover: 240 10% 7%;
-    --popover-foreground: 0 0% 90%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 15%;
 
-    --primary: 156 100% 50%;
-    --primary-foreground: 240 10% 4%;
+    --primary: 160 85% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 10% 12%;
-    --secondary-foreground: 0 0% 85%;
+    --secondary: 220 10% 96%;
+    --secondary-foreground: 220 15% 20%;
 
-    --muted: 240 10% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 220 10% 95%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 190 100% 45%;
-    --accent-foreground: 240 10% 4%;
+    --accent: 200 95% 45%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 80% 50%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 10% 18%;
-    --input: 240 10% 15%;
-    --ring: 156 100% 50%;
+    --border: 220 10% 85%;
+    --input: 220 10% 90%;
+    --ring: 160 85% 40%;
 
     --radius: 0px;
 
-    /* Custom neon colors */
-    --neon-green: 156 100% 50%;
-    --neon-cyan: 190 100% 50%;
-    --neon-orange: 25 100% 55%;
-    --neon-red: 0 72% 55%;
-    --neon-yellow: 45 100% 55%;
+    /* Bold accent colors */
+    --neon-green: 160 85% 40%;
+    --neon-cyan: 200 95% 45%;
+    --neon-orange: 25 95% 55%;
+    --neon-red: 0 80% 50%;
+    --neon-yellow: 40 95% 50%;
 
-    /* Glow effects */
-    --glow-green: 0 0 20px hsl(156 100% 50% / 0.4);
-    --glow-cyan: 0 0 20px hsl(190 100% 50% / 0.4);
-    --glow-orange: 0 0 20px hsl(25 100% 55% / 0.4);
+    /* Subtle shadow effects (replacing glows) */
+    --shadow-green: 0 4px 12px hsl(160 85% 40% / 0.2);
+    --shadow-cyan: 0 4px 12px hsl(200 95% 45% / 0.2);
+    --shadow-orange: 0 4px 12px hsl(25 95% 55% / 0.2);
 
-    /* Pixel grid pattern */
-    --pixel-grid: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0z' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/svg%3E");
+    /* Subtle pixel grid pattern */
+    --pixel-grid: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h1v1H0z' fill='%23000000' fill-opacity='0.03'/%3E%3C/svg%3E");
   }
 
   .dark {
@@ -79,21 +79,22 @@
 @layer components {
   /* Pixel border style */
   .pixel-border {
-    border: 2px solid hsl(var(--border));
+    border: 2px solid hsl(220 15% 20%);
     box-shadow: 
-      inset -2px -2px 0 0 hsl(240 10% 10%),
-      inset 2px 2px 0 0 hsl(240 10% 20%);
+      inset -2px -2px 0 0 hsl(220 10% 90%),
+      inset 2px 2px 0 0 hsl(220 10% 80%),
+      0 2px 8px hsl(220 10% 20% / 0.08);
   }
 
   .pixel-border-glow {
-    border: 2px solid hsl(var(--neon-green) / 0.5);
+    border: 2px solid hsl(var(--neon-green));
     box-shadow: 
-      inset -2px -2px 0 0 hsl(240 10% 10%),
-      inset 2px 2px 0 0 hsl(var(--neon-green) / 0.2),
-      var(--glow-green);
+      inset -2px -2px 0 0 hsl(220 10% 90%),
+      inset 2px 2px 0 0 hsl(var(--neon-green) / 0.3),
+      var(--shadow-green);
   }
 
-  /* Scanline effect */
+  /* Scanline effect - very subtle on white */
   .scanlines::before {
     content: '';
     position: absolute;
@@ -102,19 +103,19 @@
       0deg,
       transparent,
       transparent 2px,
-      hsl(0 0% 0% / 0.03) 2px,
-      hsl(0 0% 0% / 0.03) 4px
+      hsl(220 10% 50% / 0.015) 2px,
+      hsl(220 10% 50% / 0.015) 4px
     );
     pointer-events: none;
   }
 
-  /* Neon glow text */
+  /* Bold text colors (no glow on light theme) */
   .text-glow-green {
-    text-shadow: 0 0 10px hsl(var(--neon-green) / 0.5), 0 0 20px hsl(var(--neon-green) / 0.3);
+    color: hsl(var(--neon-green));
   }
 
   .text-glow-cyan {
-    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5), 0 0 20px hsl(var(--neon-cyan) / 0.3);
+    color: hsl(var(--neon-cyan));
   }
 
   /* Pixel underline animation */
@@ -131,43 +132,42 @@
     height: 2px;
     background: hsl(var(--neon-green));
     transition: width 0.3s ease;
-    box-shadow: var(--glow-green);
   }
 
   .pixel-underline:hover::after {
     width: 100%;
   }
 
-  /* Hover glow effect */
+  /* Hover effect */
   .hover-glow {
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
   .hover-glow:hover {
-    border-color: hsl(var(--neon-green) / 0.6);
+    border-color: hsl(var(--neon-green));
     box-shadow: 
-      inset -2px -2px 0 0 hsl(240 10% 10%),
+      inset -2px -2px 0 0 hsl(220 10% 90%),
       inset 2px 2px 0 0 hsl(var(--neon-green) / 0.2),
-      var(--glow-green);
+      0 4px 16px hsl(160 85% 40% / 0.15);
   }
 
-  /* Status badges */
+  /* Status badges - light theme optimized */
   .badge-live {
-    background: hsl(var(--neon-green) / 0.15);
-    color: hsl(var(--neon-green));
-    border: 1px solid hsl(var(--neon-green) / 0.4);
+    background: hsl(160 85% 40% / 0.12);
+    color: hsl(160 85% 35%);
+    border: 1px solid hsl(160 85% 40% / 0.3);
   }
 
   .badge-testing {
-    background: hsl(var(--neon-yellow) / 0.15);
-    color: hsl(var(--neon-yellow));
-    border: 1px solid hsl(var(--neon-yellow) / 0.4);
+    background: hsl(40 95% 50% / 0.12);
+    color: hsl(40 90% 35%);
+    border: 1px solid hsl(40 95% 50% / 0.3);
   }
 
   .badge-coming {
-    background: hsl(var(--muted) / 0.5);
-    color: hsl(var(--muted-foreground));
-    border: 1px solid hsl(var(--border));
+    background: hsl(220 10% 90%);
+    color: hsl(220 10% 45%);
+    border: 1px solid hsl(220 10% 80%);
   }
 
   /* Pixel divider */
@@ -176,15 +176,15 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      hsl(var(--border)) 10%,
-      hsl(var(--border)) 90%,
+      hsl(220 15% 75%) 10%,
+      hsl(220 15% 75%) 90%,
       transparent 100%
     );
   }
 }
 
 @layer utilities {
-  /* Shimmer animation */
+  /* Shimmer animation - subtle gray on light */
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
@@ -194,7 +194,7 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      hsl(var(--neon-green) / 0.05) 50%,
+      hsl(220 10% 50% / 0.04) 50%,
       transparent 100%
     );
     background-size: 200% 100%;

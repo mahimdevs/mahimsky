@@ -8,10 +8,10 @@ const navLinks = [
 
 const Header = () => {
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="font-pixel text-sm text-foreground tracking-wider hover:text-glow-green transition-all duration-300">
+        <Link to="/" className="font-pixel text-sm text-foreground tracking-wider hover:text-primary transition-all duration-300">
           MAHIM SKY
         </Link>
 
@@ -30,9 +30,9 @@ const Header = () => {
 
         {/* Mobile nav indicator */}
         <div className="md:hidden flex gap-1">
-          <span className="w-1 h-1 bg-neon-green"></span>
-          <span className="w-1 h-1 bg-neon-green"></span>
-          <span className="w-1 h-1 bg-neon-green"></span>
+          <span className="w-1 h-1 bg-primary"></span>
+          <span className="w-1 h-1 bg-primary"></span>
+          <span className="w-1 h-1 bg-primary"></span>
         </div>
       </div>
 
