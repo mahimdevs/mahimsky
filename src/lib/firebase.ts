@@ -5,7 +5,7 @@ import { getFirestore } from 'firebase/firestore';
 // TODO: Replace with your Firebase config from Firebase Console
 // Go to: Firebase Console > Project Settings > Your Apps > Web App
 const firebaseConfig = {
-  apiKey: "AIzaSyBKml64bDa_AI8IpK22ZgTJ9jOxS313tRc",
+  apiKey: "AIzaSyBKml64bDa_AI8IpK22ZgTJ9jOxS3l3tRc",
   authDomain: "mahimskyweb.firebaseapp.com",
   projectId: "mahimskyweb",
   storageBucket: "mahimskyweb.firebasestorage.app",
