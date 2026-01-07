@@ -52,11 +52,11 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         neon: {
-          green: "hsl(var(--neon-green))",
-          cyan: "hsl(var(--neon-cyan))",
-          orange: "hsl(var(--neon-orange))",
-          red: "hsl(var(--neon-red))",
-          yellow: "hsl(var(--neon-yellow))",
+          green: "hsl(160 85% 40%)",
+          cyan: "hsl(200 95% 45%)",
+          orange: "hsl(25 95% 55%)",
+          red: "hsl(0 80% 50%)",
+          yellow: "hsl(40 95% 50%)",
         },
       },
       borderRadius: {

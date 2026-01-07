@@ -5,10 +5,10 @@ const HeroSection = () => {
       <div className="absolute inset-0 animate-shimmer" />
       
       {/* Decorative pixel corners */}
-      <div className="absolute top-8 left-8 w-8 h-8 border-l-2 border-t-2 border-border opacity-40" />
-      <div className="absolute top-8 right-8 w-8 h-8 border-r-2 border-t-2 border-border opacity-40" />
-      <div className="absolute bottom-8 left-8 w-8 h-8 border-l-2 border-b-2 border-border opacity-40" />
-      <div className="absolute bottom-8 right-8 w-8 h-8 border-r-2 border-b-2 border-border opacity-40" />
+      <div className="absolute top-8 left-8 w-8 h-8 border-l-2 border-t-2 border-border opacity-60" />
+      <div className="absolute top-8 right-8 w-8 h-8 border-r-2 border-t-2 border-border opacity-60" />
+      <div className="absolute bottom-8 left-8 w-8 h-8 border-l-2 border-b-2 border-border opacity-60" />
+      <div className="absolute bottom-8 right-8 w-8 h-8 border-r-2 border-b-2 border-border opacity-60" />
 
       <div className="container relative z-10 text-center px-4">
         {/* Main Title */}
@@ -28,8 +28,8 @@ const HeroSection = () => {
 
         {/* Decorative pixel elements */}
         <div className="flex justify-center gap-2 mt-12">
-          <span className="w-2 h-2 bg-neon-green/60"></span>
-          <span className="w-2 h-2 bg-neon-cyan/60"></span>
+          <span className="w-2 h-2 bg-primary/60"></span>
+          <span className="w-2 h-2 bg-accent/60"></span>
           <span className="w-2 h-2 bg-neon-orange/60"></span>
         </div>
       </div>
