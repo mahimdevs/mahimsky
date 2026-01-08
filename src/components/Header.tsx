@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Coins, FlaskConical, Wrench, Pickaxe } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, Wrench, Gem } from "lucide-react";
 
 const navLinks = [
   { label: "Earn", href: "/earn", slot: 1, Icon: Coins },
@@ -16,10 +16,13 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="inventory-slot-logo group">
-          <Pickaxe className="w-4 h-4 text-foreground/70 group-hover:text-primary transition-colors" />
-          <span className="font-pixel text-xs text-foreground tracking-wider">
-            MAHIM SKY
-          </span>
+          <div className="logo-icon-wrapper">
+            <Gem className="logo-icon" />
+          </div>
+          <div className="logo-text-wrapper">
+            <span className="logo-label">MAHIM</span>
+            <span className="logo-accent">SKY</span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

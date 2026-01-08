@@ -192,24 +192,78 @@
   }
 
   .inventory-slot-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     padding: 8px 16px;
-    background: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 90%) 100%);
+    background: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 92%) 100%);
     border: 2px solid hsl(0 0% 70%);
-    border-top-color: hsl(0 0% 85%);
-    border-left-color: hsl(0 0% 85%);
+    border-top-color: hsl(0 0% 88%);
+    border-left-color: hsl(0 0% 88%);
     box-shadow: 
       inset 1px 1px 0 hsl(0 0% 100%),
-      inset -1px -1px 0 hsl(0 0% 60%),
-      2px 2px 0 hsl(0 0% 50% / 0.2);
-    transition: all 0.15s ease;
+      inset -1px -1px 0 hsl(0 0% 65%),
+      2px 2px 0 hsl(0 0% 50% / 0.15);
+    transition: all 0.2s ease;
   }
 
   .inventory-slot-logo:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    background: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 95%) 100%);
     box-shadow: 
       inset 1px 1px 0 hsl(0 0% 100%),
-      inset -1px -1px 0 hsl(0 0% 60%),
-      3px 3px 0 hsl(0 0% 50% / 0.3);
+      inset -1px -1px 0 hsl(0 0% 70%),
+      0 0 16px hsl(180 60% 60% / 0.25),
+      3px 4px 0 hsl(0 0% 50% / 0.2);
+  }
+
+  .logo-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, hsl(180 50% 85%) 0%, hsl(180 40% 75%) 100%);
+    border: 2px solid hsl(180 30% 60%);
+    box-shadow: 
+      inset 1px 1px 0 hsl(180 40% 90%),
+      inset -1px -1px 0 hsl(180 30% 55%);
+  }
+
+  .logo-icon {
+    width: 16px;
+    height: 16px;
+    color: hsl(180 50% 35%);
+    transition: all 0.2s ease;
+  }
+
+  .inventory-slot-logo:hover .logo-icon {
+    color: hsl(180 60% 30%);
+    transform: rotate(-10deg) scale(1.1);
+  }
+
+  .logo-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  .logo-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: hsl(0 0% 25%);
+    letter-spacing: 0.5px;
+  }
+
+  .logo-accent {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: hsl(180 50% 40%);
+    letter-spacing: 1px;
+  }
+
+  .inventory-slot-logo:hover .logo-accent {
+    color: hsl(180 60% 35%);
   }
 
   .inventory-slot {
