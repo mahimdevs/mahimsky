@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import { Menu, X, Coins, FlaskConical, Wrench, Pickaxe } from "lucide-react";
 
 const navLinks = [
-  { label: "Earn", href: "#earn", slot: 1, Icon: Coins },
-  { label: "Experiments", href: "#experiments", slot: 2, Icon: FlaskConical },
-  { label: "Tools", href: "#tools", slot: 3, Icon: Wrench },
+  { label: "Earn", href: "/earn", slot: 1, Icon: Coins },
+  { label: "Experiments", href: "/experiments", slot: 2, Icon: FlaskConical },
+  { label: "Tools", href: "/tools", slot: 3, Icon: Wrench },
 ];
 
 const Header = () => {
@@ -25,9 +25,9 @@ const Header = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-2">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
-              href={link.href}
+              to={link.href}
               className="inventory-slot group"
             >
               <span className="slot-number">{link.slot}</span>
@@ -35,7 +35,7 @@ const Header = () => {
               <span className="font-pixel text-[10px] text-foreground/80 group-hover:text-foreground transition-colors">
                 {link.label}
               </span>
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -59,9 +59,9 @@ const Header = () => {
           <div className="container py-4">
             <div className="grid grid-cols-3 gap-2">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.label}
-                  href={link.href}
+                  to={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className="inventory-slot-mobile-item group"
                 >
@@ -70,7 +70,7 @@ const Header = () => {
                   <span className="font-pixel text-[8px] text-foreground/80">
                     {link.label}
                   </span>
-                </a>
+                </Link>
               ))}
             </div>
           </div>
