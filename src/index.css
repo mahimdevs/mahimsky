@@ -253,7 +253,21 @@
     font-family: 'Press Start 2P', monospace;
     font-size: 6px;
     color: hsl(0 0% 50%);
-    opacity: 0.7;
+    opacity: 0.5;
+  }
+
+  .slot-icon {
+    width: 18px;
+    height: 18px;
+    color: hsl(0 0% 45%);
+    transition: all 0.2s ease;
+    margin-bottom: 2px;
+  }
+
+  .inventory-slot:hover .slot-icon,
+  .inventory-slot-mobile-item:hover .slot-icon {
+    color: hsl(180 50% 40%);
+    transform: scale(1.15);
   }
 
   .inventory-slot-mobile {
