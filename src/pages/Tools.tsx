@@ -41,10 +41,17 @@ const Tools = () => {
     const cardContent = (
       <div className="overflow-hidden">
         {tool.imageUrl ? (
-          <img src={tool.imageUrl} alt={tool.title} className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" />
-        ) : (
-          <IconComponent className="w-8 h-8 text-primary mb-4 flex-shrink-0" />
-        )}
+          <img 
+            src={tool.imageUrl} 
+            alt={tool.title} 
+            className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" 
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+        ) : null}
+        <IconComponent className={`w-8 h-8 text-primary mb-4 flex-shrink-0 ${tool.imageUrl ? 'hidden' : ''}`} />
         <div className="flex items-center gap-2 mb-2">
           <h3 className="font-pixel text-sm break-words overflow-hidden">{tool.title}</h3>
           {tool.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}

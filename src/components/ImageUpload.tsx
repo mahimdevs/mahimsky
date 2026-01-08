@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { storage } from '@/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Button } from '@/components/ui/button';
-import { Upload, X, Loader2 } from 'lucide-react';
+import { Upload, X, Loader2, ImageIcon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface ImageUploadProps {
   value?: string;
@@ -12,42 +13,84 @@ interface ImageUploadProps {
 
 const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
   const [uploading, setUploading] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const uploadFile = async (file: File) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+      toast({ title: 'Error', description: 'Please select an image file', variant: 'destructive' });
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      alert('Image must be less than 5MB');
+      toast({ title: 'Error', description: 'Image must be less than 5MB', variant: 'destructive' });
       return;
     }
 
     setUploading(true);
+    setImageError(false);
+    
     try {
-      const fileName = `${Date.now()}-${file.name}`;
+      const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
+      
+      const snapshot = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snapshot.ref);
+      
       onChange(url);
-    } catch (error) {
+      toast({ title: 'Success', description: 'Image uploaded successfully' });
+    } catch (error: any) {
       console.error('Upload failed:', error);
-      alert('Failed to upload image. Please try again.');
+      
+      let errorMessage = 'Failed to upload image.';
+      if (error?.code === 'storage/unauthorized') {
+        errorMessage = 'Storage access denied. Please check Firebase Storage rules.';
+      } else if (error?.code === 'storage/canceled') {
+        errorMessage = 'Upload was cancelled.';
+      } else if (error?.code === 'storage/unknown') {
+        errorMessage = 'Network error. Please try again.';
+      }
+      
+      toast({ title: 'Upload Failed', description: errorMessage, variant: 'destructive' });
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = '';
     }
   };
 
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) await uploadFile(file);
+  };
+
+  const handleDrop = useCallback(async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (file) await uploadFile(file);
+  }, [folder]);
+
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOver(false);
+  }, []);
+
   const handleRemove = () => {
     onChange('');
+    setImageError(false);
   };
 
   return (
@@ -61,9 +104,25 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
         id={`image-upload-${folder}`}
       />
       
-      {value ? (
+      {value && !imageError ? (
         <div className="relative w-20 h-20 rounded border border-border overflow-hidden group">
-          <img src={value} alt="Uploaded" className="w-full h-full object-cover" />
+          <img 
+            src={value} 
+            alt="Uploaded" 
+            className="w-full h-full object-cover"
+            onError={() => setImageError(true)}
+          />
+          <button
+            type="button"
+            onClick={handleRemove}
+            className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+          >
+            <X className="w-5 h-5 text-white" />
+          </button>
+        </div>
+      ) : value && imageError ? (
+        <div className="relative w-20 h-20 rounded border border-destructive/50 overflow-hidden group bg-destructive/10 flex items-center justify-center">
+          <ImageIcon className="w-6 h-6 text-destructive/50" />
           <button
             type="button"
             onClick={handleRemove}
@@ -73,23 +132,32 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
           </button>
         </div>
       ) : (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={uploading}
-          onClick={() => inputRef.current?.click()}
-          className="h-20 w-20 flex-col gap-1 border-dashed"
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onClick={() => !uploading && inputRef.current?.click()}
+          className={`
+            h-20 w-20 rounded border-2 border-dashed cursor-pointer
+            flex flex-col items-center justify-center gap-1 transition-all
+            ${dragOver 
+              ? 'border-primary bg-primary/10 scale-105' 
+              : 'border-border hover:border-primary/50 hover:bg-muted/50'
+            }
+            ${uploading ? 'pointer-events-none opacity-70' : ''}
+          `}
         >
           {uploading ? (
-            <Loader2 className="w-5 h-5 animate-spin" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           ) : (
             <>
-              <Upload className="w-5 h-5" />
-              <span className="text-[10px]">Upload</span>
+              <Upload className={`w-5 h-5 ${dragOver ? 'text-primary' : 'text-muted-foreground'}`} />
+              <span className={`text-[10px] ${dragOver ? 'text-primary' : 'text-muted-foreground'}`}>
+                {dragOver ? 'Drop' : 'Upload'}
+              </span>
             </>
           )}
-        </Button>
+        </div>
       )}
     </div>
   );

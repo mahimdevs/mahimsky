@@ -52,10 +52,17 @@ const Experiments = () => {
       <div className="overflow-hidden">
         <div className="flex items-start justify-between mb-4 gap-2">
           {exp.imageUrl ? (
-            <img src={exp.imageUrl} alt={exp.title} className="w-12 h-12 object-cover rounded flex-shrink-0" />
-          ) : (
-            <FlaskConical className="w-8 h-8 text-primary flex-shrink-0" />
-          )}
+            <img 
+              src={exp.imageUrl} 
+              alt={exp.title} 
+              className="w-12 h-12 object-cover rounded flex-shrink-0" 
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          <FlaskConical className={`w-8 h-8 text-primary flex-shrink-0 ${exp.imageUrl ? 'hidden' : ''}`} />
           <span className={`font-pixel text-[10px] px-2 py-1 rounded border flex-shrink-0 ${statusStyles[exp.status]}`}>
             {statusLabels[exp.status]}
           </span>
