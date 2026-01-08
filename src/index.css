@@ -181,6 +181,151 @@
       transparent 100%
     );
   }
+
+  /* Minecraft Light Inventory Header Styles */
+  .minecraft-header {
+    background: linear-gradient(180deg, hsl(0 0% 96%) 0%, hsl(0 0% 92%) 100%);
+    border-bottom: 3px solid hsl(0 0% 75%);
+    box-shadow: 
+      inset 0 1px 0 hsl(0 0% 100%),
+      0 2px 4px hsl(0 0% 0% / 0.1);
+  }
+
+  .inventory-slot-logo {
+    padding: 8px 16px;
+    background: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 90%) 100%);
+    border: 2px solid hsl(0 0% 70%);
+    border-top-color: hsl(0 0% 85%);
+    border-left-color: hsl(0 0% 85%);
+    box-shadow: 
+      inset 1px 1px 0 hsl(0 0% 100%),
+      inset -1px -1px 0 hsl(0 0% 60%),
+      2px 2px 0 hsl(0 0% 50% / 0.2);
+    transition: all 0.15s ease;
+  }
+
+  .inventory-slot-logo:hover {
+    transform: translateY(-1px);
+    box-shadow: 
+      inset 1px 1px 0 hsl(0 0% 100%),
+      inset -1px -1px 0 hsl(0 0% 60%),
+      3px 3px 0 hsl(0 0% 50% / 0.3);
+  }
+
+  .inventory-slot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    min-width: 80px;
+    background: linear-gradient(180deg, hsl(0 0% 88%) 0%, hsl(0 0% 78%) 100%);
+    border: 2px solid hsl(0 0% 60%);
+    border-top-color: hsl(0 0% 75%);
+    border-left-color: hsl(0 0% 75%);
+    box-shadow: 
+      inset 2px 2px 0 hsl(0 0% 95%),
+      inset -2px -2px 0 hsl(0 0% 55%);
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+
+  .inventory-slot:hover {
+    background: linear-gradient(180deg, hsl(0 0% 95%) 0%, hsl(0 0% 88%) 100%);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 
+      inset 2px 2px 0 hsl(0 0% 100%),
+      inset -2px -2px 0 hsl(0 0% 65%),
+      0 0 12px hsl(180 60% 70% / 0.4),
+      0 4px 8px hsl(0 0% 0% / 0.15);
+    border-color: hsl(180 40% 60%);
+  }
+
+  .inventory-slot:active {
+    transform: scale(0.98);
+  }
+
+  .slot-number {
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: hsl(0 0% 50%);
+    opacity: 0.7;
+  }
+
+  .inventory-slot-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(180deg, hsl(0 0% 88%) 0%, hsl(0 0% 78%) 100%);
+    border: 2px solid hsl(0 0% 60%);
+    border-top-color: hsl(0 0% 75%);
+    border-left-color: hsl(0 0% 75%);
+    box-shadow: 
+      inset 2px 2px 0 hsl(0 0% 95%),
+      inset -2px -2px 0 hsl(0 0% 55%);
+    transition: all 0.15s ease;
+  }
+
+  .inventory-slot-mobile:hover {
+    background: linear-gradient(180deg, hsl(0 0% 95%) 0%, hsl(0 0% 88%) 100%);
+  }
+
+  .mobile-inventory-panel {
+    background: linear-gradient(180deg, hsl(0 0% 92%) 0%, hsl(0 0% 86%) 100%);
+    border-bottom: 3px solid hsl(0 0% 70%);
+    box-shadow: 
+      inset 0 2px 4px hsl(0 0% 0% / 0.05),
+      0 4px 8px hsl(0 0% 0% / 0.1);
+    animation: slideDown 0.2s ease-out;
+  }
+
+  .inventory-slot-mobile-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    background: linear-gradient(180deg, hsl(0 0% 88%) 0%, hsl(0 0% 78%) 100%);
+    border: 2px solid hsl(0 0% 60%);
+    border-top-color: hsl(0 0% 75%);
+    border-left-color: hsl(0 0% 75%);
+    box-shadow: 
+      inset 2px 2px 0 hsl(0 0% 95%),
+      inset -2px -2px 0 hsl(0 0% 55%);
+    transition: all 0.15s ease;
+  }
+
+  .inventory-slot-mobile-item:active {
+    transform: scale(0.95);
+    background: linear-gradient(180deg, hsl(0 0% 82%) 0%, hsl(0 0% 72%) 100%);
+  }
+
+  .hotbar-edge {
+    height: 3px;
+    background: linear-gradient(
+      180deg,
+      hsl(0 0% 65%) 0%,
+      hsl(0 0% 50%) 100%
+    );
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @layer utilities {
