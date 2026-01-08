@@ -17,10 +17,7 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
         <Link to="/" className="inventory-slot-logo group">
-          <div className="logo-icon-wrapper">
-            <img src={logoIcon} alt="Logo" className="logo-icon-img" />
-          </div>
-          <span className="minecraft-title">MahimSky</span>
+          {/* Logo icon will be added here */}
         </Link>
 
         {/* Desktop Navigation */}
