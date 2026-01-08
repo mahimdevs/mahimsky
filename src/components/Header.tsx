@@ -20,10 +20,7 @@ const Header = () => {
           <div className="logo-icon-wrapper">
             <img src={logoIcon} alt="Logo" className="logo-icon-img" />
           </div>
-          <div className="logo-text-wrapper">
-            <span className="logo-label">MAHIM</span>
-            <span className="logo-accent">SKY</span>
-          </div>
+          <span className="minecraft-title">MahimSky</span>
         </Link>
 
         {/* Desktop Navigation */}

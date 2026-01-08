@@ -241,28 +241,25 @@
     filter: brightness(1.1);
   }
 
-  .logo-text-wrapper {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .logo-label {
+  .minecraft-title {
     font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
-    color: hsl(0 0% 25%);
-    letter-spacing: 0.5px;
-  }
-
-  .logo-accent {
-    font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
-    color: hsl(180 50% 40%);
+    font-size: 14px;
+    color: hsl(0 0% 85%);
     letter-spacing: 1px;
+    text-shadow: 
+      2px 2px 0 hsl(0 0% 20%),
+      3px 3px 0 hsl(0 0% 10%),
+      -1px -1px 0 hsl(0 0% 40%);
+    background: linear-gradient(180deg, hsl(0 0% 75%) 0%, hsl(0 0% 55%) 50%, hsl(0 0% 45%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 3px 0 hsl(0 0% 15%));
+    transition: all 0.2s ease;
   }
 
-  .inventory-slot-logo:hover .logo-accent {
-    color: hsl(180 60% 35%);
+  .inventory-slot-logo:hover .minecraft-title {
+    filter: drop-shadow(2px 3px 0 hsl(0 0% 10%)) brightness(1.1);
   }
 
   .inventory-slot {
