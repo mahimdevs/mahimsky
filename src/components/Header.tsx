@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Coins, FlaskConical, Wrench, Gem } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, Wrench } from "lucide-react";
+import logoIcon from "@/assets/logo-icon.png";
 
 const navLinks = [
   { label: "Earn", href: "/earn", slot: 1, Icon: Coins },
@@ -17,7 +18,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="inventory-slot-logo group">
           <div className="logo-icon-wrapper">
-            <Gem className="logo-icon" />
+            <img src={logoIcon} alt="Logo" className="logo-icon-img" />
           </div>
           <div className="logo-text-wrapper">
             <span className="logo-label">MAHIM</span>
