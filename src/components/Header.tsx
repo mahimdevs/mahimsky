@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, Wrench, Pickaxe } from "lucide-react";
 
 const navLinks = [
-  { label: "Earn", href: "#earn", slot: 1 },
-  { label: "Experiments", href: "#experiments", slot: 2 },
-  { label: "Tools", href: "#tools", slot: 3 },
+  { label: "Earn", href: "#earn", slot: 1, Icon: Coins },
+  { label: "Experiments", href: "#experiments", slot: 2, Icon: FlaskConical },
+  { label: "Tools", href: "#tools", slot: 3, Icon: Wrench },
 ];
 
 const Header = () => {
@@ -15,7 +15,8 @@ const Header = () => {
     <header className="sticky top-0 z-50 minecraft-header">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="inventory-slot-logo">
+        <Link to="/" className="inventory-slot-logo group">
+          <Pickaxe className="w-4 h-4 text-foreground/70 group-hover:text-primary transition-colors" />
           <span className="font-pixel text-xs text-foreground tracking-wider">
             MAHIM SKY
           </span>
@@ -30,6 +31,7 @@ const Header = () => {
               className="inventory-slot group"
             >
               <span className="slot-number">{link.slot}</span>
+              <link.Icon className="slot-icon" />
               <span className="font-pixel text-[10px] text-foreground/80 group-hover:text-foreground transition-colors">
                 {link.label}
               </span>
@@ -61,9 +63,10 @@ const Header = () => {
                   key={link.label}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="inventory-slot-mobile-item"
+                  className="inventory-slot-mobile-item group"
                 >
                   <span className="slot-number">{link.slot}</span>
+                  <link.Icon className="slot-icon" />
                   <span className="font-pixel text-[8px] text-foreground/80">
                     {link.label}
                   </span>
