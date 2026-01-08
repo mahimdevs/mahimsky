@@ -18,7 +18,7 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
       toast({ title: 'Error', description: 'Please select an image file', variant: 'destructive' });
@@ -33,34 +33,49 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
 
     setUploading(true);
     setImageError(false);
-    
+
+    const timeoutMs = 25000;
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('UPLOAD_TIMEOUT')), timeoutMs)
+    );
+
     try {
       const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
       const storageRef = ref(storage, `${folder}/${fileName}`);
-      
-      const snapshot = await uploadBytes(storageRef, file);
+
+      const snapshot = (await Promise.race([
+        uploadBytes(storageRef, file),
+        timeoutPromise,
+      ])) as any;
+
       const url = await getDownloadURL(snapshot.ref);
-      
       onChange(url);
       toast({ title: 'Success', description: 'Image uploaded successfully' });
     } catch (error: any) {
       console.error('Upload failed:', error);
-      
+
+      const code = error?.code as string | undefined;
+      const message = (error?.message as string | undefined) ?? String(error);
+
       let errorMessage = 'Failed to upload image.';
-      if (error?.code === 'storage/unauthorized') {
+      if (message === 'UPLOAD_TIMEOUT') {
+        errorMessage = 'Upload timed out. Please check Firebase Storage setup and try again.';
+      } else if (code === 'storage/unauthorized') {
         errorMessage = 'Storage access denied. Please check Firebase Storage rules.';
-      } else if (error?.code === 'storage/canceled') {
+      } else if (code === 'storage/canceled') {
         errorMessage = 'Upload was cancelled.';
-      } else if (error?.code === 'storage/unknown') {
-        errorMessage = 'Network error. Please try again.';
+      } else if (code === 'storage/unknown') {
+        errorMessage = `Storage error: ${message}`;
+      } else if (message) {
+        errorMessage = message;
       }
-      
+
       toast({ title: 'Upload Failed', description: errorMessage, variant: 'destructive' });
     } finally {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = '';
     }
-  };
+  }, [folder, onChange, toast]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -71,10 +86,10 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
     e.preventDefault();
     e.stopPropagation();
     setDragOver(false);
-    
+
     const file = e.dataTransfer.files?.[0];
     if (file) await uploadFile(file);
-  }, [folder]);
+  }, [uploadFile]);
 
   const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
