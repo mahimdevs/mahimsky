@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Coins, FlaskConical, Wrench } from "lucide-react";
-import logoIcon from "@/assets/logo-icon.png";
+import mahimskyLogo from "@/assets/mahimsky-logo.png";
 
 const navLinks = [
   { label: "Earn", href: "/earn", slot: 1, Icon: Coins },
@@ -16,8 +16,8 @@ const Header = () => {
     <header className="sticky top-0 z-50 minecraft-header">
       <div className="container flex h-16 items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="inventory-slot-logo group">
-          {/* Logo icon will be added here */}
+        <Link to="/" className="header-logo-link group">
+          <img src={mahimskyLogo} alt="MahimSky" className="header-logo-img" />
         </Link>
 
         {/* Desktop Navigation */}
