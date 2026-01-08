@@ -39,18 +39,18 @@ const Tools = () => {
     const IconComponent = iconMap[tool.icon] || Wrench;
     
     const cardContent = (
-      <>
+      <div className="overflow-hidden">
         {tool.imageUrl ? (
-          <img src={tool.imageUrl} alt={tool.title} className="w-12 h-12 object-cover rounded mb-4" />
+          <img src={tool.imageUrl} alt={tool.title} className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" />
         ) : (
-          <IconComponent className="w-8 h-8 text-primary mb-4" />
+          <IconComponent className="w-8 h-8 text-primary mb-4 flex-shrink-0" />
         )}
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-pixel text-sm">{tool.title}</h3>
-          {tool.link && <ExternalLink className="w-3 h-3 text-muted-foreground" />}
+          <h3 className="font-pixel text-sm break-words overflow-hidden">{tool.title}</h3>
+          {tool.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}
         </div>
-        <p className="text-sm text-muted-foreground">{tool.description}</p>
-      </>
+        <p className="text-sm text-muted-foreground break-words overflow-hidden">{tool.description}</p>
+      </div>
     );
 
     if (tool.link) {
@@ -60,7 +60,7 @@ const Tools = () => {
           href={tool.link} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02]"
+          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden"
         >
           {cardContent}
         </a>
@@ -68,7 +68,7 @@ const Tools = () => {
     }
 
     return (
-      <div key={tool.id} className="pixel-border p-6 hover-glow">
+      <div key={tool.id} className="pixel-border p-6 hover-glow overflow-hidden">
         {cardContent}
       </div>
     );

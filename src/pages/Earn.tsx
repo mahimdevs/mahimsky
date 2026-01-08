@@ -39,18 +39,18 @@ const Earn = () => {
     const IconComponent = iconMap[item.icon] || Coins;
     
     const cardContent = (
-      <>
+      <div className="overflow-hidden">
         {item.imageUrl ? (
-          <img src={item.imageUrl} alt={item.title} className="w-12 h-12 object-cover rounded mb-4" />
+          <img src={item.imageUrl} alt={item.title} className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" />
         ) : (
-          <IconComponent className="w-8 h-8 text-primary mb-4" />
+          <IconComponent className="w-8 h-8 text-primary mb-4 flex-shrink-0" />
         )}
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-pixel text-sm">{item.title}</h3>
-          {item.link && <ExternalLink className="w-3 h-3 text-muted-foreground" />}
+          <h3 className="font-pixel text-sm break-words overflow-hidden">{item.title}</h3>
+          {item.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}
         </div>
-        <p className="text-sm text-muted-foreground">{item.description}</p>
-      </>
+        <p className="text-sm text-muted-foreground break-words overflow-hidden">{item.description}</p>
+      </div>
     );
 
     if (item.link) {
@@ -60,7 +60,7 @@ const Earn = () => {
           href={item.link} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02]"
+          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden"
         >
           {cardContent}
         </a>
@@ -68,7 +68,7 @@ const Earn = () => {
     }
 
     return (
-      <div key={item.id} className="pixel-border p-6 hover-glow">
+      <div key={item.id} className="pixel-border p-6 hover-glow overflow-hidden">
         {cardContent}
       </div>
     );

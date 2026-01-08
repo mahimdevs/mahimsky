@@ -293,12 +293,19 @@ const AdminDashboard = () => {
                     <Label className="font-pixel text-xs flex items-center gap-2">
                       <Image className="w-3 h-3" /> Image URL (optional)
                     </Label>
-                    <Input
-                      value={earnForm.imageUrl}
-                      onChange={(e) => setEarnForm({ ...earnForm, imageUrl: e.target.value })}
-                      placeholder="https://example.com/image.png"
-                      className="bg-background"
-                    />
+                    <div className="flex gap-3">
+                      <Input
+                        value={earnForm.imageUrl}
+                        onChange={(e) => setEarnForm({ ...earnForm, imageUrl: e.target.value })}
+                        placeholder="https://example.com/image.png"
+                        className="bg-background flex-1"
+                      />
+                      {earnForm.imageUrl && (
+                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
+                          <img src={earnForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">
@@ -407,12 +414,19 @@ const AdminDashboard = () => {
                     <Label className="font-pixel text-xs flex items-center gap-2">
                       <Image className="w-3 h-3" /> Image URL (optional)
                     </Label>
-                    <Input
-                      value={toolForm.imageUrl}
-                      onChange={(e) => setToolForm({ ...toolForm, imageUrl: e.target.value })}
-                      placeholder="https://example.com/image.png"
-                      className="bg-background"
-                    />
+                    <div className="flex gap-3">
+                      <Input
+                        value={toolForm.imageUrl}
+                        onChange={(e) => setToolForm({ ...toolForm, imageUrl: e.target.value })}
+                        placeholder="https://example.com/image.png"
+                        className="bg-background flex-1"
+                      />
+                      {toolForm.imageUrl && (
+                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
+                          <img src={toolForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">
@@ -521,12 +535,19 @@ const AdminDashboard = () => {
                     <Label className="font-pixel text-xs flex items-center gap-2">
                       <Image className="w-3 h-3" /> Image URL (optional)
                     </Label>
-                    <Input
-                      value={experimentForm.imageUrl}
-                      onChange={(e) => setExperimentForm({ ...experimentForm, imageUrl: e.target.value })}
-                      placeholder="https://example.com/image.png"
-                      className="bg-background"
-                    />
+                    <div className="flex gap-3">
+                      <Input
+                        value={experimentForm.imageUrl}
+                        onChange={(e) => setExperimentForm({ ...experimentForm, imageUrl: e.target.value })}
+                        placeholder="https://example.com/image.png"
+                        className="bg-background flex-1"
+                      />
+                      {experimentForm.imageUrl && (
+                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
+                          <img src={experimentForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">

@@ -49,23 +49,23 @@ const Experiments = () => {
 
   const renderCard = (exp: Experiment) => {
     const cardContent = (
-      <>
-        <div className="flex items-start justify-between mb-4">
+      <div className="overflow-hidden">
+        <div className="flex items-start justify-between mb-4 gap-2">
           {exp.imageUrl ? (
-            <img src={exp.imageUrl} alt={exp.title} className="w-12 h-12 object-cover rounded" />
+            <img src={exp.imageUrl} alt={exp.title} className="w-12 h-12 object-cover rounded flex-shrink-0" />
           ) : (
-            <FlaskConical className="w-8 h-8 text-primary" />
+            <FlaskConical className="w-8 h-8 text-primary flex-shrink-0" />
           )}
-          <span className={`font-pixel text-[10px] px-2 py-1 rounded border ${statusStyles[exp.status]}`}>
+          <span className={`font-pixel text-[10px] px-2 py-1 rounded border flex-shrink-0 ${statusStyles[exp.status]}`}>
             {statusLabels[exp.status]}
           </span>
         </div>
         <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-pixel text-sm">{exp.title}</h3>
-          {exp.link && <ExternalLink className="w-3 h-3 text-muted-foreground" />}
+          <h3 className="font-pixel text-sm break-words overflow-hidden">{exp.title}</h3>
+          {exp.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}
         </div>
-        <p className="text-sm text-muted-foreground">{exp.description}</p>
-      </>
+        <p className="text-sm text-muted-foreground break-words overflow-hidden">{exp.description}</p>
+      </div>
     );
 
     if (exp.link) {
@@ -75,7 +75,7 @@ const Experiments = () => {
           href={exp.link} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02]"
+          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden"
         >
           {cardContent}
         </a>
@@ -83,7 +83,7 @@ const Experiments = () => {
     }
 
     return (
-      <div key={exp.id} className="pixel-border p-6 hover-glow">
+      <div key={exp.id} className="pixel-border p-6 hover-glow overflow-hidden">
         {cardContent}
       </div>
     );
