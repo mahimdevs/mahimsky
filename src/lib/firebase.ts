@@ -9,7 +9,8 @@ const firebaseConfig = {
   apiKey: "AIzaSyBKml64bDa_AI8IpK22ZgTJ9jOxS3l3tRc",
   authDomain: "mahimskyweb.firebaseapp.com",
   projectId: "mahimskyweb",
-  storageBucket: "mahimskyweb.firebasestorage.app",
+  // Firebase expects the bucket name (typically <project-id>.appspot.com)
+  storageBucket: "mahimskyweb.appspot.com",
   messagingSenderId: "12854657898",
   appId: "1:12854657898:web:0b7a3dfa12080ea6c95b13",
   measurementId: "G-EYEC6ZHHCG"
