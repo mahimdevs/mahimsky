@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // TODO: Replace with your Firebase config from Firebase Console
 // Go to: Firebase Console > Project Settings > Your Apps > Web App
@@ -17,3 +18,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);

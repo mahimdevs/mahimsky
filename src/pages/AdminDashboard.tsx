@@ -10,7 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Pencil, Trash2, Plus, LogOut, ExternalLink, Image } from 'lucide-react';
+import { Pencil, Trash2, Plus, LogOut, ExternalLink, ImageIcon } from 'lucide-react';
+import ImageUpload from '@/components/ImageUpload';
 
 interface EarnItem {
   id?: string;
@@ -290,22 +291,12 @@ const AdminDashboard = () => {
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="font-pixel text-xs flex items-center gap-2">
-                      <Image className="w-3 h-3" /> Image URL (optional)
-                    </Label>
-                    <div className="flex gap-3">
-                      <Input
-                        value={earnForm.imageUrl}
-                        onChange={(e) => setEarnForm({ ...earnForm, imageUrl: e.target.value })}
-                        placeholder="https://example.com/image.png"
-                        className="bg-background flex-1"
-                      />
-                      {earnForm.imageUrl && (
-                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
-                          <img src={earnForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                        </div>
-                      )}
-                    </div>
+                    <Label className="font-pixel text-xs">Image (optional)</Label>
+                    <ImageUpload
+                      value={earnForm.imageUrl}
+                      onChange={(url) => setEarnForm({ ...earnForm, imageUrl: url })}
+                      folder="earn"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">
@@ -345,7 +336,7 @@ const AdminDashboard = () => {
                     <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                     {(item.imageUrl || item.link) && (
                       <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
-                        {item.imageUrl && <span className="flex items-center gap-1"><Image className="w-3 h-3" /> Has image</span>}
+                        {item.imageUrl && <span className="flex items-center gap-1"><ImageIcon className="w-3 h-3" /> Has image</span>}
                         {item.link && <span className="flex items-center gap-1"><ExternalLink className="w-3 h-3" /> Has link</span>}
                       </div>
                     )}
@@ -411,22 +402,12 @@ const AdminDashboard = () => {
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="font-pixel text-xs flex items-center gap-2">
-                      <Image className="w-3 h-3" /> Image URL (optional)
-                    </Label>
-                    <div className="flex gap-3">
-                      <Input
-                        value={toolForm.imageUrl}
-                        onChange={(e) => setToolForm({ ...toolForm, imageUrl: e.target.value })}
-                        placeholder="https://example.com/image.png"
-                        className="bg-background flex-1"
-                      />
-                      {toolForm.imageUrl && (
-                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
-                          <img src={toolForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                        </div>
-                      )}
-                    </div>
+                    <Label className="font-pixel text-xs">Image (optional)</Label>
+                    <ImageUpload
+                      value={toolForm.imageUrl}
+                      onChange={(url) => setToolForm({ ...toolForm, imageUrl: url })}
+                      folder="tools"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">
@@ -466,7 +447,7 @@ const AdminDashboard = () => {
                     <p className="text-sm text-muted-foreground line-clamp-2">{tool.description}</p>
                     {(tool.imageUrl || tool.link) && (
                       <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
-                        {tool.imageUrl && <span className="flex items-center gap-1"><Image className="w-3 h-3" /> Has image</span>}
+                        {tool.imageUrl && <span className="flex items-center gap-1"><ImageIcon className="w-3 h-3" /> Has image</span>}
                         {tool.link && <span className="flex items-center gap-1"><ExternalLink className="w-3 h-3" /> Has link</span>}
                       </div>
                     )}
@@ -532,22 +513,12 @@ const AdminDashboard = () => {
                 </div>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="font-pixel text-xs flex items-center gap-2">
-                      <Image className="w-3 h-3" /> Image URL (optional)
-                    </Label>
-                    <div className="flex gap-3">
-                      <Input
-                        value={experimentForm.imageUrl}
-                        onChange={(e) => setExperimentForm({ ...experimentForm, imageUrl: e.target.value })}
-                        placeholder="https://example.com/image.png"
-                        className="bg-background flex-1"
-                      />
-                      {experimentForm.imageUrl && (
-                        <div className="w-10 h-10 rounded border border-border overflow-hidden flex-shrink-0">
-                          <img src={experimentForm.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                        </div>
-                      )}
-                    </div>
+                    <Label className="font-pixel text-xs">Image (optional)</Label>
+                    <ImageUpload
+                      value={experimentForm.imageUrl}
+                      onChange={(url) => setExperimentForm({ ...experimentForm, imageUrl: url })}
+                      folder="experiments"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="font-pixel text-xs flex items-center gap-2">
@@ -592,7 +563,7 @@ const AdminDashboard = () => {
                     <p className="text-sm text-muted-foreground line-clamp-2">{exp.description}</p>
                     {(exp.imageUrl || exp.link) && (
                       <div className="flex gap-3 mt-2 text-xs text-muted-foreground">
-                        {exp.imageUrl && <span className="flex items-center gap-1"><Image className="w-3 h-3" /> Has image</span>}
+                        {exp.imageUrl && <span className="flex items-center gap-1"><ImageIcon className="w-3 h-3" /> Has image</span>}
                         {exp.link && <span className="flex items-center gap-1"><ExternalLink className="w-3 h-3" /> Has link</span>}
                       </div>
                     )}
