@@ -1,24 +1,17 @@
-import { Zap, Clock, DollarSign } from "lucide-react";
+import { Zap, Clock, DollarSign, Star, Target, LucideIcon } from "lucide-react";
+import { useTools } from "@/hooks/useFirestoreData";
 
-const tools = [
-  {
-    title: "Income Calculator",
-    description: "Estimate potential earnings from different online paths",
-    icon: DollarSign,
-  },
-  {
-    title: "Time Tracker",
-    description: "Track time spent on earning experiments",
-    icon: Clock,
-  },
-  {
-    title: "Quick Start Guide",
-    description: "Get started earning with zero budget today",
-    icon: Zap,
-  },
-];
+const iconMap: Record<string, LucideIcon> = {
+  Zap,
+  Clock,
+  DollarSign,
+  Star,
+  Target,
+};
 
 const ToolsSection = () => {
+  const { tools, loading } = useTools();
+
   return (
     <section id="tools" className="py-20">
       <div className="container px-4">
@@ -46,31 +39,40 @@ const ToolsSection = () => {
 
         {/* Tools list */}
         <div className="max-w-2xl mx-auto space-y-4">
-          {tools.map((tool, index) => (
-            <div key={tool.title}>
-              <div className="pixel-border bg-card p-5 hover-glow transition-all duration-300 flex items-start gap-4">
-                {/* Icon */}
-                <div className="p-2 bg-secondary shrink-0">
-                  <tool.icon className="w-5 h-5 text-neon-cyan" strokeWidth={1.5} />
-                </div>
+          {loading ? (
+            <p className="text-center text-muted-foreground text-sm">Loading...</p>
+          ) : tools.length === 0 ? (
+            <p className="text-center text-muted-foreground text-sm">No tools yet</p>
+          ) : (
+            tools.map((tool, index) => {
+              const IconComponent = iconMap[tool.icon] || Zap;
+              return (
+                <div key={tool.id}>
+                  <div className="pixel-border bg-card p-5 hover-glow transition-all duration-300 flex items-start gap-4">
+                    {/* Icon */}
+                    <div className="p-2 bg-secondary shrink-0">
+                      <IconComponent className="w-5 h-5 text-neon-cyan" strokeWidth={1.5} />
+                    </div>
 
-                {/* Content */}
-                <div>
-                  <h3 className="font-pixel text-xs text-foreground mb-2">
-                    {tool.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {tool.description}
-                  </p>
-                </div>
-              </div>
+                    {/* Content */}
+                    <div>
+                      <h3 className="font-pixel text-xs text-foreground mb-2">
+                        {tool.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {tool.description}
+                      </p>
+                    </div>
+                  </div>
 
-              {/* Pixel divider between items */}
-              {index < tools.length - 1 && (
-                <div className="pixel-divider my-4 max-w-xs mx-auto opacity-50" />
-              )}
-            </div>
-          ))}
+                  {/* Pixel divider between items */}
+                  {index < tools.length - 1 && (
+                    <div className="pixel-divider my-4 max-w-xs mx-auto opacity-50" />
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
 
         {/* Note */}
