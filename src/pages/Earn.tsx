@@ -41,10 +41,17 @@ const Earn = () => {
     const cardContent = (
       <div className="overflow-hidden">
         {item.imageUrl ? (
-          <img src={item.imageUrl} alt={item.title} className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" />
-        ) : (
-          <IconComponent className="w-8 h-8 text-primary mb-4 flex-shrink-0" />
-        )}
+          <img 
+            src={item.imageUrl} 
+            alt={item.title} 
+            className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" 
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
+          />
+        ) : null}
+        <IconComponent className={`w-8 h-8 text-primary mb-4 flex-shrink-0 ${item.imageUrl ? 'hidden' : ''}`} />
         <div className="flex items-center gap-2 mb-2">
           <h3 className="font-pixel text-sm break-words overflow-hidden">{item.title}</h3>
           {item.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}
