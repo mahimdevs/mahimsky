@@ -191,6 +191,24 @@
       0 2px 4px hsl(0 0% 0% / 0.1);
   }
 
+  .header-logo-link {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    transition: all 0.2s ease;
+  }
+
+  .header-logo-img {
+    height: 40px;
+    width: auto;
+    transition: all 0.2s ease;
+  }
+
+  .header-logo-link:hover .header-logo-img {
+    transform: scale(1.05);
+    filter: drop-shadow(0 2px 8px hsl(200 60% 50% / 0.4));
+  }
+
   .inventory-slot-logo {
     display: flex;
     align-items: center;
