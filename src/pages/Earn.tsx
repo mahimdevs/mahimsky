@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
-import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { supabase } from '@/lib/supabase';
 import { Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
 interface EarnItem {
@@ -24,8 +23,9 @@ const Earn = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const snap = await getDocs(collection(db, 'earn'));
-        setItems(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as EarnItem)));
+        const { data, error } = await supabase.from('earn').select('*');
+        if (error) throw error;
+        setItems(data || []);
       } catch (error) {
         console.error('Failed to fetch earn items:', error);
       } finally {

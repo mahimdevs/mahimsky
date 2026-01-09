@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
-import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { supabase } from '@/lib/supabase';
 import { FlaskConical, Beaker, TestTube, Atom, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
 interface Experiment {
@@ -36,8 +35,9 @@ const Experiments = () => {
   useEffect(() => {
     const fetchExperiments = async () => {
       try {
-        const snap = await getDocs(collection(db, 'experiments'));
-        setExperiments(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experiment)));
+        const { data, error } = await supabase.from('experiments').select('*');
+        if (error) throw error;
+        setExperiments(data || []);
       } catch (error) {
         console.error('Failed to fetch experiments:', error);
       } finally {

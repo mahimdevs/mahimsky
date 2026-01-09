@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
 
 export interface Guide {
   id: string;
@@ -29,8 +28,9 @@ export const useGuides = () => {
   useEffect(() => {
     const fetchGuides = async () => {
       try {
-        const snapshot = await getDocs(collection(db, 'guides'));
-        setGuides(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Guide)));
+        const { data, error } = await supabase.from('guides').select('*');
+        if (error) throw error;
+        setGuides(data || []);
       } catch (error) {
         console.error('Error fetching guides:', error);
       } finally {
@@ -50,8 +50,9 @@ export const useTools = () => {
   useEffect(() => {
     const fetchTools = async () => {
       try {
-        const snapshot = await getDocs(collection(db, 'tools'));
-        setTools(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Tool)));
+        const { data, error } = await supabase.from('tools').select('*');
+        if (error) throw error;
+        setTools(data || []);
       } catch (error) {
         console.error('Error fetching tools:', error);
       } finally {
@@ -71,8 +72,9 @@ export const useExperiments = () => {
   useEffect(() => {
     const fetchExperiments = async () => {
       try {
-        const snapshot = await getDocs(collection(db, 'experiments'));
-        setExperiments(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experiment)));
+        const { data, error } = await supabase.from('experiments').select('*');
+        if (error) throw error;
+        setExperiments(data || []);
       } catch (error) {
         console.error('Error fetching experiments:', error);
       } finally {
