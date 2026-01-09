@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -79,15 +78,19 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [earnSnap, toolsSnap, experimentsSnap] = await Promise.all([
-        getDocs(collection(db, 'earn')),
-        getDocs(collection(db, 'tools')),
-        getDocs(collection(db, 'experiments')),
+      const [earnRes, toolsRes, experimentsRes] = await Promise.all([
+        supabase.from('earn').select('*'),
+        supabase.from('tools').select('*'),
+        supabase.from('experiments').select('*'),
       ]);
 
-      setEarnItems(earnSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as EarnItem)));
-      setTools(toolsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Tool)));
-      setExperiments(experimentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experiment)));
+      if (earnRes.error) throw earnRes.error;
+      if (toolsRes.error) throw toolsRes.error;
+      if (experimentsRes.error) throw experimentsRes.error;
+
+      setEarnItems(earnRes.data || []);
+      setTools(toolsRes.data || []);
+      setExperiments(experimentsRes.data || []);
     } catch (error) {
       toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' });
     } finally {
@@ -112,10 +115,12 @@ const AdminDashboard = () => {
         link: earnForm.link || ''
       };
       if (editingEarn?.id) {
-        await updateDoc(doc(db, 'earn', editingEarn.id), data);
+        const { error } = await supabase.from('earn').update(data).eq('id', editingEarn.id);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Earn item updated' });
       } else {
-        await addDoc(collection(db, 'earn'), data);
+        const { error } = await supabase.from('earn').insert(data);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Earn item created' });
       }
       setEarnForm({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '' });
@@ -128,7 +133,8 @@ const AdminDashboard = () => {
 
   const deleteEarn = async (id: string) => {
     try {
-      await deleteDoc(doc(db, 'earn', id));
+      const { error } = await supabase.from('earn').delete().eq('id', id);
+      if (error) throw error;
       toast({ title: 'Success', description: 'Earn item deleted' });
       fetchData();
     } catch (error) {
@@ -148,10 +154,12 @@ const AdminDashboard = () => {
         link: toolForm.link || ''
       };
       if (editingTool?.id) {
-        await updateDoc(doc(db, 'tools', editingTool.id), data);
+        const { error } = await supabase.from('tools').update(data).eq('id', editingTool.id);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Tool updated' });
       } else {
-        await addDoc(collection(db, 'tools'), data);
+        const { error } = await supabase.from('tools').insert(data);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Tool created' });
       }
       setToolForm({ title: '', description: '', icon: 'Wrench', imageUrl: '', link: '' });
@@ -164,7 +172,8 @@ const AdminDashboard = () => {
 
   const deleteTool = async (id: string) => {
     try {
-      await deleteDoc(doc(db, 'tools', id));
+      const { error } = await supabase.from('tools').delete().eq('id', id);
+      if (error) throw error;
       toast({ title: 'Success', description: 'Tool deleted' });
       fetchData();
     } catch (error) {
@@ -184,10 +193,12 @@ const AdminDashboard = () => {
         link: experimentForm.link || ''
       };
       if (editingExperiment?.id) {
-        await updateDoc(doc(db, 'experiments', editingExperiment.id), data);
+        const { error } = await supabase.from('experiments').update(data).eq('id', editingExperiment.id);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Experiment updated' });
       } else {
-        await addDoc(collection(db, 'experiments'), data);
+        const { error } = await supabase.from('experiments').insert(data);
+        if (error) throw error;
         toast({ title: 'Success', description: 'Experiment created' });
       }
       setExperimentForm({ title: '', description: '', status: 'coming', imageUrl: '', link: '' });
@@ -200,7 +211,8 @@ const AdminDashboard = () => {
 
   const deleteExperiment = async (id: string) => {
     try {
-      await deleteDoc(doc(db, 'experiments', id));
+      const { error } = await supabase.from('experiments').delete().eq('id', id);
+      if (error) throw error;
       toast({ title: 'Success', description: 'Experiment deleted' });
       fetchData();
     } catch (error) {

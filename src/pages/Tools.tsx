@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
-import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { supabase } from '@/lib/supabase';
 import { Wrench, Calculator, Map, Sword, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
 interface Tool {
@@ -24,8 +23,9 @@ const Tools = () => {
   useEffect(() => {
     const fetchTools = async () => {
       try {
-        const snap = await getDocs(collection(db, 'tools'));
-        setTools(snap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Tool)));
+        const { data, error } = await supabase.from('tools').select('*');
+        if (error) throw error;
+        setTools(data || []);
       } catch (error) {
         console.error('Failed to fetch tools:', error);
       } finally {

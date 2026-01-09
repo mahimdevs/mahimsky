@@ -1,7 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { storage } from '@/lib/firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Button } from '@/components/ui/button';
+import { supabase } from '@/lib/supabase';
 import { Upload, X, Loader2, ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -34,40 +32,32 @@ const ImageUpload = ({ value, onChange, folder }: ImageUploadProps) => {
     setUploading(true);
     setImageError(false);
 
-    const timeoutMs = 25000;
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('UPLOAD_TIMEOUT')), timeoutMs)
-    );
-
     try {
-      const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-      const storageRef = ref(storage, `${folder}/${fileName}`);
+      const fileName = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      
+      const { data, error } = await supabase.storage
+        .from('images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      const snapshot = (await Promise.race([
-        uploadBytes(storageRef, file),
-        timeoutPromise,
-      ])) as any;
+      if (error) throw error;
 
-      const url = await getDownloadURL(snapshot.ref);
-      onChange(url);
+      const { data: urlData } = supabase.storage
+        .from('images')
+        .getPublicUrl(data.path);
+
+      onChange(urlData.publicUrl);
       toast({ title: 'Success', description: 'Image uploaded successfully' });
     } catch (error: any) {
       console.error('Upload failed:', error);
-
-      const code = error?.code as string | undefined;
-      const message = (error?.message as string | undefined) ?? String(error);
-
+      
       let errorMessage = 'Failed to upload image.';
-      if (message === 'UPLOAD_TIMEOUT') {
-        errorMessage = 'Upload timed out. Please check Firebase Storage setup and try again.';
-      } else if (code === 'storage/unauthorized') {
-        errorMessage = 'Storage access denied. Please check Firebase Storage rules.';
-      } else if (code === 'storage/canceled') {
-        errorMessage = 'Upload was cancelled.';
-      } else if (code === 'storage/unknown') {
-        errorMessage = `Storage error: ${message}`;
-      } else if (message) {
-        errorMessage = message;
+      if (error?.message?.includes('Bucket not found')) {
+        errorMessage = 'Storage bucket not configured. Please create an "images" bucket in Supabase Storage.';
+      } else if (error?.message) {
+        errorMessage = error.message;
       }
 
       toast({ title: 'Upload Failed', description: errorMessage, variant: 'destructive' });
