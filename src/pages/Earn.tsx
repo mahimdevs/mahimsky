@@ -39,26 +39,53 @@ const Earn = () => {
     const IconComponent = iconMap[item.icon] || Coins;
     
     const cardContent = (
-      <div className="overflow-hidden">
-        {item.imageUrl ? (
-          <img 
-            src={item.imageUrl} 
-            alt={item.title} 
-            className="w-12 h-12 object-cover rounded mb-4 flex-shrink-0" 
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
-            }}
-          />
-        ) : null}
-        <IconComponent className={`w-8 h-8 text-primary mb-4 flex-shrink-0 ${item.imageUrl ? 'hidden' : ''}`} />
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-pixel text-sm break-words overflow-hidden">{item.title}</h3>
-          {item.link && <ExternalLink className="w-3 h-3 text-muted-foreground flex-shrink-0" />}
+      <div className="h-full flex flex-col">
+        {/* Image/Icon Header */}
+        <div className="relative mb-4">
+          {item.imageUrl ? (
+            <div className="w-full h-32 rounded-sm overflow-hidden bg-muted/50">
+              <img 
+                src={item.imageUrl} 
+                alt={item.title} 
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" 
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+              <div className="hidden absolute inset-0 flex items-center justify-center bg-muted/30">
+                <IconComponent className="w-12 h-12 text-primary/60" />
+              </div>
+            </div>
+          ) : (
+            <div className="w-full h-32 rounded-sm bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+              <IconComponent className="w-12 h-12 text-primary transition-transform duration-300 group-hover:scale-110" />
+            </div>
+          )}
         </div>
-        <p className="text-sm text-muted-foreground break-words overflow-hidden">{item.description}</p>
+        
+        {/* Content */}
+        <div className="flex-1 flex flex-col">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <h3 className="font-pixel text-xs leading-relaxed text-foreground line-clamp-2">{item.title}</h3>
+            {item.link && (
+              <ExternalLink className="w-4 h-4 text-muted-foreground flex-shrink-0 transition-colors group-hover:text-primary" />
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground line-clamp-3 flex-1">{item.description}</p>
+        </div>
+        
+        {/* Footer accent */}
+        <div className="mt-4 pt-3 border-t border-border/50">
+          <span className="text-xs text-primary font-medium flex items-center gap-1">
+            {item.link ? 'Learn more' : 'Coming soon'}
+            {item.link && <ExternalLink className="w-3 h-3" />}
+          </span>
+        </div>
       </div>
     );
+
+    const cardClasses = "group relative pixel-border p-5 hover-glow bg-card transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden h-full";
 
     if (item.link) {
       return (
@@ -67,7 +94,7 @@ const Earn = () => {
           href={item.link} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="pixel-border p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden"
+          className={cardClasses}
         >
           {cardContent}
         </a>
@@ -75,7 +102,7 @@ const Earn = () => {
     }
 
     return (
-      <div key={item.id} className="pixel-border p-6 hover-glow overflow-hidden">
+      <div key={item.id} className={cardClasses}>
         {cardContent}
       </div>
     );
