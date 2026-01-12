@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Earn from "./pages/Earn";
 import Experiments from "./pages/Experiments";
 import Tools from "./pages/Tools";
+import Owner from "./pages/Owner";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/earn" element={<Earn />} />
             <Route path="/experiments" element={<Experiments />} />
             <Route path="/tools" element={<Tools />} />
+            <Route path="/owner" element={<Owner />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
