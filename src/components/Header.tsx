@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Coins, FlaskConical, Wrench } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, Wrench, User } from "lucide-react";
 import mahimskyLogo from "@/assets/mahimsky-logo.png";
 const navLinks = [{
   label: "Earn",
@@ -17,6 +17,11 @@ const navLinks = [{
   href: "/tools",
   slot: 3,
   Icon: Wrench
+}, {
+  label: "Owner",
+  href: "/owner",
+  slot: 4,
+  Icon: User
 }];
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
