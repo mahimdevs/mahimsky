@@ -103,6 +103,16 @@ const AdminDashboard = () => {
     navigate('/admin/login');
   };
 
+  // Helper to normalize URLs
+  const normalizeUrl = (url: string): string => {
+    if (!url) return '';
+    url = url.trim();
+    if (url && !url.match(/^https?:\/\//i)) {
+      return 'https://' + url;
+    }
+    return url;
+  };
+
   // Earn CRUD
   const saveEarn = async () => {
     if (!earnForm.title || !earnForm.description) return;
@@ -112,7 +122,7 @@ const AdminDashboard = () => {
         description: earnForm.description, 
         icon: earnForm.icon,
         imageUrl: earnForm.imageUrl || '',
-        link: earnForm.link || ''
+        link: normalizeUrl(earnForm.link || '')
       };
       if (editingEarn?.id) {
         const { error } = await supabase.from('earn').update(data).eq('id', editingEarn.id);
@@ -151,7 +161,7 @@ const AdminDashboard = () => {
         description: toolForm.description, 
         icon: toolForm.icon,
         imageUrl: toolForm.imageUrl || '',
-        link: toolForm.link || ''
+        link: normalizeUrl(toolForm.link || '')
       };
       if (editingTool?.id) {
         const { error } = await supabase.from('tools').update(data).eq('id', editingTool.id);
@@ -190,7 +200,7 @@ const AdminDashboard = () => {
         description: experimentForm.description, 
         status: experimentForm.status,
         imageUrl: experimentForm.imageUrl || '',
-        link: experimentForm.link || ''
+        link: normalizeUrl(experimentForm.link || '')
       };
       if (editingExperiment?.id) {
         const { error } = await supabase.from('experiments').update(data).eq('id', editingExperiment.id);
