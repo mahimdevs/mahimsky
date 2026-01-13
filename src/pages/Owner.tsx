@@ -48,35 +48,18 @@ const Owner = () => {
             className="flex flex-col items-center text-center mb-16"
           >
             {/* Photo with decorative ring */}
-            <div className="relative mb-8">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative"
-              >
-                {/* Glowing ring effect */}
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary via-accent to-primary rounded-full blur-md opacity-50 animate-pulse" />
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full opacity-75" />
-                
-                {/* Photo */}
-                <img 
-                  src={mahimPhoto}
-                  alt="Mahim Sky"
-                  className="relative w-40 h-40 md:w-52 md:h-52 rounded-full object-cover border-4 border-background shadow-2xl"
-                />
-                
-                {/* Decorative badge */}
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.5 }}
-                  className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground p-2 rounded-full shadow-lg"
-                >
-                  <Sparkles className="w-5 h-5" />
-                </motion.div>
-              </motion.div>
-            </div>
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mb-8"
+            >
+              <img 
+                src={mahimPhoto}
+                alt="Mahim Sky"
+                className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full object-cover border-4 border-border shadow-xl"
+              />
+            </motion.div>
 
             {/* Name & Title */}
             <motion.h1 
