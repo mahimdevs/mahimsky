@@ -77,7 +77,7 @@ const Owner = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="text-lg md:text-xl text-muted-foreground font-medium mb-6"
             >
-              Independent Web Creator & Digital Experimenter
+              Solo Entrepreneur
             </motion.p>
 
             {/* Tagline */}
