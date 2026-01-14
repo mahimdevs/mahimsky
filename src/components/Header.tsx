@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Coins, FlaskConical, Wrench, User } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, Wrench, User, TrendingUp } from "lucide-react";
 import mahimskyLogo from "@/assets/mahimsky-logo.png";
 const navLinks = [{
   label: "Earn",
@@ -18,9 +18,14 @@ const navLinks = [{
   slot: 3,
   Icon: Wrench
 }, {
+  label: "Investments",
+  href: "/investments",
+  slot: 4,
+  Icon: TrendingUp
+}, {
   label: "Owner",
   href: "/owner",
-  slot: 4,
+  slot: 5,
   Icon: User
 }];
 const Header = () => {
