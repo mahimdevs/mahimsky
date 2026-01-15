@@ -30,15 +30,15 @@ import {
 const Investments = () => {
   const { investments, loading: dbLoading, error: dbError } = useInvestments();
   
-  // Create trading pairs from database investments (symbol + USDT)
-  const tradingPairs = investments.map((inv) => `${inv.symbol}USDT`);
+  // Use symbol directly as trading pair (symbols already include USDT suffix like BTCUSDT)
+  const tradingPairs = investments.map((inv) => inv.symbol);
   const { prices, isLoading: pricesLoading, error: pricesError, lastUpdated, refetch } = useBinancePrices(tradingPairs);
   
   const isLoading = dbLoading || pricesLoading;
   const error = dbError || pricesError;
 
   const calculatePL = (investment: Investment) => {
-    const tradingPair = `${investment.symbol}USDT`;
+    const tradingPair = investment.symbol; // Symbol already includes USDT
     const priceData = prices[tradingPair];
     if (!priceData) return { currentValue: 0, pl: 0, plPercent: 0, currentPrice: investment.entry_price };
 
@@ -262,7 +262,7 @@ const Investments = () => {
                       </TableRow>
                     ) : (
                       investments.map((investment) => {
-                        const tradingPair = `${investment.symbol}USDT`;
+                        const tradingPair = investment.symbol; // Symbol already includes USDT
                         const { currentValue, pl, plPercent, currentPrice } = calculatePL(investment);
                         const isProfit = pl >= 0;
 
