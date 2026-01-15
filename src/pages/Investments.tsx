@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useBinancePrices } from "@/hooks/useBinancePrices";
+import { useInvestments, Investment } from "@/hooks/useInvestments";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -10,7 +11,9 @@ import {
   Clock,
   Database,
   Calculator,
-  Info
+  Info,
+  Wifi,
+  Loader2
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,62 +27,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Investment data - manually entered
-const investments = [
-  {
-    id: 1,
-    name: "Bitcoin",
-    symbol: "BTC",
-    tradingPair: "BTCUSDT",
-    invested: 1000,
-    entryPrice: 42000,
-    quantity: 0.0238,
-    status: "Active" as const,
-  },
-  {
-    id: 2,
-    name: "Ethereum",
-    symbol: "ETH",
-    tradingPair: "ETHUSDT",
-    invested: 500,
-    entryPrice: 2200,
-    quantity: 0.227,
-    status: "Active" as const,
-  },
-  {
-    id: 3,
-    name: "Solana",
-    symbol: "SOL",
-    tradingPair: "SOLUSDT",
-    invested: 300,
-    entryPrice: 95,
-    quantity: 3.158,
-    status: "Holding" as const,
-  },
-];
-
 const Investments = () => {
-  const tradingPairs = investments.map((inv) => inv.tradingPair);
-  const { prices, isLoading, error, lastUpdated, refetch } = useBinancePrices(tradingPairs);
+  const { investments, loading: dbLoading, error: dbError } = useInvestments();
+  
+  // Create trading pairs from database investments (symbol + USDT)
+  const tradingPairs = investments.map((inv) => `${inv.symbol}USDT`);
+  const { prices, isLoading: pricesLoading, error: pricesError, lastUpdated, refetch } = useBinancePrices(tradingPairs);
+  
+  const isLoading = dbLoading || pricesLoading;
+  const error = dbError || pricesError;
 
-  const calculatePL = (investment: typeof investments[0]) => {
-    const priceData = prices[investment.tradingPair];
-    if (!priceData) return { currentValue: 0, pl: 0, plPercent: 0 };
+  const calculatePL = (investment: Investment) => {
+    const tradingPair = `${investment.symbol}USDT`;
+    const priceData = prices[tradingPair];
+    if (!priceData) return { currentValue: 0, pl: 0, plPercent: 0, currentPrice: investment.entry_price };
 
     const currentValue = priceData.price * investment.quantity;
-    const pl = currentValue - investment.invested;
-    const plPercent = (pl / investment.invested) * 100;
+    const pl = currentValue - investment.invested_amount;
+    const plPercent = investment.invested_amount > 0 ? (pl / investment.invested_amount) * 100 : 0;
 
-    return { currentValue, pl, plPercent };
+    return { currentValue, pl, plPercent, currentPrice: priceData.price };
   };
 
-  const totalInvested = investments.reduce((sum, inv) => sum + inv.invested, 0);
+  const totalInvested = investments.reduce((sum, inv) => sum + inv.invested_amount, 0);
   const totalCurrentValue = investments.reduce((sum, inv) => {
     const { currentValue } = calculatePL(inv);
     return sum + currentValue;
   }, 0);
   const totalPL = totalCurrentValue - totalInvested;
-  const totalPLPercent = (totalPL / totalInvested) * 100;
+  const totalPLPercent = totalInvested > 0 ? (totalPL / totalInvested) * 100 : 0;
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -180,11 +156,17 @@ const Investments = () => {
         {/* Update Info */}
         <div className="max-w-4xl mx-auto mb-8">
           <div className="flex items-center justify-between flex-wrap gap-4 bg-muted/30 p-4 rounded-lg">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Clock className="w-4 h-4" />
-              <span>
-                Last updated: {lastUpdated ? lastUpdated.toLocaleString() : 'Never'}
-              </span>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-green-500" />
+                <span className="text-green-500 font-medium">Real-time sync</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                <span>
+                  Last updated: {lastUpdated ? lastUpdated.toLocaleString() : 'Never'}
+                </span>
+              </div>
             </div>
             <Button 
               variant="outline" 
@@ -263,65 +245,82 @@ const Investments = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {investments.map((investment) => {
-                      const priceData = prices[investment.tradingPair];
-                      const { currentValue, pl, plPercent } = calculatePL(investment);
-                      const isProfit = pl >= 0;
+                    {dbLoading ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center py-8">
+                          <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            Loading investments...
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : investments.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                          No investments found
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      investments.map((investment) => {
+                        const tradingPair = `${investment.symbol}USDT`;
+                        const { currentValue, pl, plPercent, currentPrice } = calculatePL(investment);
+                        const isProfit = pl >= 0;
 
-                      return (
-                        <TableRow key={investment.id}>
-                          <TableCell>
-                            <div>
-                              <p className="font-medium text-foreground">{investment.name}</p>
-                              <p className="text-xs text-muted-foreground">{investment.symbol}</p>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-muted-foreground">
-                            {investment.tradingPair}
-                          </TableCell>
-                          <TableCell className="text-right font-medium">
-                            {formatCurrency(investment.invested)}
-                          </TableCell>
-                          <TableCell className="text-right text-muted-foreground">
-                            {formatPrice(investment.entryPrice)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {isLoading ? (
-                              <span className="text-muted-foreground">Loading...</span>
-                            ) : priceData ? (
-                              formatPrice(priceData.price)
-                            ) : (
-                              <span className="text-muted-foreground">N/A</span>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right font-medium">
-                            {isLoading ? '...' : formatCurrency(currentValue)}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            {!isLoading && priceData && (
-                              <div className={`flex items-center justify-end gap-1 ${isProfit ? 'text-green-500' : 'text-red-500'}`}>
-                                {isProfit ? (
-                                  <TrendingUp className="w-4 h-4" />
-                                ) : (
-                                  <TrendingDown className="w-4 h-4" />
-                                )}
-                                <div className="text-right">
-                                  <p className="font-medium">{formatCurrency(pl)}</p>
-                                  <p className="text-xs">({plPercent.toFixed(2)}%)</p>
-                                </div>
+                        return (
+                          <TableRow key={investment.id}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium text-foreground">{investment.name}</p>
+                                <p className="text-xs text-muted-foreground">{investment.symbol}</p>
                               </div>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Badge 
-                              variant={investment.status === 'Active' ? 'default' : 'secondary'}
-                            >
-                              {investment.status}
-                            </Badge>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                              {tradingPair}
+                            </TableCell>
+                            <TableCell className="text-right font-medium">
+                              {formatCurrency(investment.invested_amount)}
+                            </TableCell>
+                            <TableCell className="text-right text-muted-foreground">
+                              {formatPrice(investment.entry_price)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {pricesLoading ? (
+                                <span className="text-muted-foreground">Loading...</span>
+                              ) : prices[tradingPair] ? (
+                                formatPrice(currentPrice)
+                              ) : (
+                                <span className="text-muted-foreground">N/A</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right font-medium">
+                              {pricesLoading ? '...' : formatCurrency(currentValue)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {!pricesLoading && prices[tradingPair] && (
+                                <div className={`flex items-center justify-end gap-1 ${isProfit ? 'text-green-500' : 'text-red-500'}`}>
+                                  {isProfit ? (
+                                    <TrendingUp className="w-4 h-4" />
+                                  ) : (
+                                    <TrendingDown className="w-4 h-4" />
+                                  )}
+                                  <div className="text-right">
+                                    <p className="font-medium">{formatCurrency(pl)}</p>
+                                    <p className="text-xs">({plPercent.toFixed(2)}%)</p>
+                                  </div>
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <Badge 
+                                variant={investment.status === 'Active' ? 'default' : 'secondary'}
+                              >
+                                {investment.status}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
                   </TableBody>
                 </Table>
               </div>
