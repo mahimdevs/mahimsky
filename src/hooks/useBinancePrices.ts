@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 interface PriceData {
   symbol: string;
@@ -14,7 +14,6 @@ interface UseBinancePricesResult {
   refetch: () => void;
 }
 
-const CACHE_DURATION = 30000; // 30 seconds cache
 const REFRESH_INTERVAL = 60000; // 1 minute auto-refresh
 
 export const useBinancePrices = (symbols: string[]): UseBinancePricesResult => {
@@ -22,15 +21,25 @@ export const useBinancePrices = (symbols: string[]): UseBinancePricesResult => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  
+  // Memoize symbols to prevent infinite re-renders
+  const symbolsKey = symbols.sort().join(',');
+  const stableSymbols = useMemo(() => symbols, [symbolsKey]);
+  
+  // Track if initial fetch is done
+  const hasFetched = useRef(false);
 
   const fetchPrices = useCallback(async () => {
-    if (symbols.length === 0) return;
+    if (stableSymbols.length === 0) {
+      setIsLoading(false);
+      return;
+    }
     
     setIsLoading(true);
     setError(null);
 
     try {
-      const pricePromises = symbols.map(async (symbol) => {
+      const pricePromises = stableSymbols.map(async (symbol) => {
         const response = await fetch(
           `https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`
         );
@@ -56,12 +65,13 @@ export const useBinancePrices = (symbols: string[]): UseBinancePricesResult => {
 
       setPrices(newPrices);
       setLastUpdated(new Date());
+      hasFetched.current = true;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch prices');
     } finally {
       setIsLoading(false);
     }
-  }, [symbols]);
+  }, [stableSymbols]);
 
   useEffect(() => {
     fetchPrices();
