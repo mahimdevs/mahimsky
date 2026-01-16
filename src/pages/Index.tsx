@@ -1,5 +1,7 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import LiveStatsWidget from "@/components/LiveStatsWidget";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -7,7 +9,9 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <LiveStatsWidget />
       </main>
+      <Footer />
     </div>
   );
 };
