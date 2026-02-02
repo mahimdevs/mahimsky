@@ -51,7 +51,7 @@ const ExperimentPostPage = () => {
           .from('experiments')
           .select('*')
           .eq('slug', slug)
-          .single();
+          .maybeSingle();
         
         if (error) throw error;
         setPost(data);

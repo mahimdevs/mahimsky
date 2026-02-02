@@ -19,6 +19,8 @@ interface EarnItem {
   icon: string;
   imageUrl?: string;
   link?: string;
+  slug?: string;
+  content?: string;
 }
 
 interface Tool {
@@ -37,6 +39,8 @@ interface Experiment {
   status: 'live' | 'testing' | 'coming';
   imageUrl?: string;
   link?: string;
+  slug?: string;
+  content?: string;
 }
 
 const ICON_OPTIONS = [
@@ -60,9 +64,9 @@ const AdminDashboard = () => {
   const [editingTool, setEditingTool] = useState<Tool | null>(null);
   const [editingExperiment, setEditingExperiment] = useState<Experiment | null>(null);
 
-  const [earnForm, setEarnForm] = useState<EarnItem>({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '' });
+  const [earnForm, setEarnForm] = useState<EarnItem>({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '', slug: '', content: '' });
   const [toolForm, setToolForm] = useState<Tool>({ title: '', description: '', icon: 'Wrench', imageUrl: '', link: '' });
-  const [experimentForm, setExperimentForm] = useState<Experiment>({ title: '', description: '', status: 'coming', imageUrl: '', link: '' });
+  const [experimentForm, setExperimentForm] = useState<Experiment>({ title: '', description: '', status: 'coming', imageUrl: '', link: '', slug: '', content: '' });
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -114,15 +118,28 @@ const AdminDashboard = () => {
   };
 
   // Earn CRUD
+  // Generate slug from title
+  const generateSlug = (title: string): string => {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/[\s_-]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   const saveEarn = async () => {
     if (!earnForm.title || !earnForm.description) return;
     try {
+      const slug = earnForm.slug || generateSlug(earnForm.title);
       const data = { 
         title: earnForm.title, 
         description: earnForm.description, 
         icon: earnForm.icon,
         imageUrl: earnForm.imageUrl || '',
-        link: normalizeUrl(earnForm.link || '')
+        link: normalizeUrl(earnForm.link || ''),
+        slug,
+        content: earnForm.content || ''
       };
       if (editingEarn?.id) {
         const { error } = await supabase.from('earn').update(data).eq('id', editingEarn.id);
@@ -133,7 +150,7 @@ const AdminDashboard = () => {
         if (error) throw error;
         toast({ title: 'Success', description: 'Earn item created' });
       }
-      setEarnForm({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '' });
+      setEarnForm({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '', slug: '', content: '' });
       setEditingEarn(null);
       fetchData();
     } catch (error) {
@@ -195,12 +212,15 @@ const AdminDashboard = () => {
   const saveExperiment = async () => {
     if (!experimentForm.title || !experimentForm.description) return;
     try {
+      const slug = experimentForm.slug || generateSlug(experimentForm.title);
       const data = { 
         title: experimentForm.title, 
         description: experimentForm.description, 
         status: experimentForm.status,
         imageUrl: experimentForm.imageUrl || '',
-        link: normalizeUrl(experimentForm.link || '')
+        link: normalizeUrl(experimentForm.link || ''),
+        slug,
+        content: experimentForm.content || ''
       };
       if (editingExperiment?.id) {
         const { error } = await supabase.from('experiments').update(data).eq('id', editingExperiment.id);
@@ -211,7 +231,7 @@ const AdminDashboard = () => {
         if (error) throw error;
         toast({ title: 'Success', description: 'Experiment created' });
       }
-      setExperimentForm({ title: '', description: '', status: 'coming', imageUrl: '', link: '' });
+      setExperimentForm({ title: '', description: '', status: 'coming', imageUrl: '', link: '', slug: '', content: '' });
       setEditingExperiment(null);
       fetchData();
     } catch (error) {
@@ -332,6 +352,26 @@ const AdminDashboard = () => {
                     />
                   </div>
                 </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs">Slug (auto-generated if empty)</Label>
+                    <Input
+                      value={earnForm.slug}
+                      onChange={(e) => setEarnForm({ ...earnForm, slug: e.target.value })}
+                      placeholder="my-earn-post"
+                      className="bg-background"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label className="font-pixel text-xs">Content (HTML supported)</Label>
+                  <Textarea
+                    value={earnForm.content}
+                    onChange={(e) => setEarnForm({ ...earnForm, content: e.target.value })}
+                    placeholder="<p>Detailed content for the post page...</p>"
+                    className="bg-background min-h-[120px]"
+                  />
+                </div>
               </div>
               <div className="flex gap-2 mt-6">
                 <Button onClick={saveEarn} className="font-pixel text-xs gap-2">
@@ -339,7 +379,7 @@ const AdminDashboard = () => {
                   {editingEarn ? 'UPDATE' : 'ADD'}
                 </Button>
                 {editingEarn && (
-                  <Button variant="outline" onClick={() => { setEditingEarn(null); setEarnForm({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '' }); }} className="font-pixel text-xs">
+                  <Button variant="outline" onClick={() => { setEditingEarn(null); setEarnForm({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '', slug: '', content: '' }); }} className="font-pixel text-xs">
                     Cancel
                   </Button>
                 )}
@@ -554,6 +594,26 @@ const AdminDashboard = () => {
                     />
                   </div>
                 </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs">Slug (auto-generated if empty)</Label>
+                    <Input
+                      value={experimentForm.slug}
+                      onChange={(e) => setExperimentForm({ ...experimentForm, slug: e.target.value })}
+                      placeholder="my-experiment"
+                      className="bg-background"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label className="font-pixel text-xs">Content (HTML supported)</Label>
+                  <Textarea
+                    value={experimentForm.content}
+                    onChange={(e) => setExperimentForm({ ...experimentForm, content: e.target.value })}
+                    placeholder="<p>Detailed content for the experiment page...</p>"
+                    className="bg-background min-h-[120px]"
+                  />
+                </div>
               </div>
               <div className="flex gap-2 mt-6">
                 <Button onClick={saveExperiment} className="font-pixel text-xs gap-2">
@@ -561,7 +621,7 @@ const AdminDashboard = () => {
                   {editingExperiment ? 'UPDATE' : 'ADD'}
                 </Button>
                 {editingExperiment && (
-                  <Button variant="outline" onClick={() => { setEditingExperiment(null); setExperimentForm({ title: '', description: '', status: 'coming', imageUrl: '', link: '' }); }} className="font-pixel text-xs">
+                  <Button variant="outline" onClick={() => { setEditingExperiment(null); setExperimentForm({ title: '', description: '', status: 'coming', imageUrl: '', link: '', slug: '', content: '' }); }} className="font-pixel text-xs">
                     Cancel
                   </Button>
                 )}
