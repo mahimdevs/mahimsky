@@ -110,7 +110,7 @@ const ExperimentPostPage = () => {
     "@type": "Article",
     "headline": post.title,
     "description": post.description,
-    "image": post.imageUrl || "https://mahimsky.lovable.app/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png",
+    "image": post.imageUrl || "https://mahimsky.online/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png",
     "author": {
       "@type": "Person",
       "name": "Mahimsky"
@@ -120,16 +120,16 @@ const ExperimentPostPage = () => {
       "name": "Mahimsky",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://mahimsky.lovable.app/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png"
+        "url": "https://mahimsky.online/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png"
       }
     },
     "datePublished": post.created_at || new Date().toISOString(),
     "dateModified": post.updated_at || post.created_at || new Date().toISOString(),
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://mahimsky.lovable.app/experiments/${post.slug}`
+      "@id": `https://mahimsky.online/experiments/${post.slug}`
     },
-    "url": `https://mahimsky.lovable.app/experiments/${post.slug}`
+    "url": `https://mahimsky.online/experiments/${post.slug}`
   };
 
   return (
