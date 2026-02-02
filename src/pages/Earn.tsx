@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from '@/lib/supabase';
-import { Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
+import { Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ArrowRight } from "lucide-react";
 
 interface EarnItem {
   id?: string;
@@ -12,6 +13,7 @@ interface EarnItem {
   icon: string;
   imageUrl?: string;
   link?: string;
+  slug?: string;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -68,20 +70,15 @@ const Earn = () => {
         
         {/* Content */}
         <div className="flex-1 flex flex-col">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="font-pixel text-[10px] md:text-xs leading-relaxed text-foreground line-clamp-2">{item.title}</h3>
-            {item.link && (
-              <ExternalLink className="w-3 h-3 md:w-4 md:h-4 text-muted-foreground flex-shrink-0 transition-colors group-hover:text-primary" />
-            )}
-          </div>
+          <h3 className="font-pixel text-[10px] md:text-xs leading-relaxed text-foreground line-clamp-2 mb-2">{item.title}</h3>
           <p className="text-xs md:text-sm text-muted-foreground line-clamp-3 flex-1">{item.description}</p>
         </div>
         
         {/* Footer accent */}
         <div className="mt-3 md:mt-4 pt-2 md:pt-3 border-t border-border/50">
           <span className="text-[10px] md:text-xs text-primary font-medium flex items-center gap-1">
-            {item.link ? 'Learn more' : 'Coming soon'}
-            {item.link && <ExternalLink className="w-2.5 h-2.5 md:w-3 md:h-3" />}
+            Read more
+            <ArrowRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
           </span>
         </div>
       </div>
@@ -89,17 +86,16 @@ const Earn = () => {
 
     const cardClasses = "group relative pixel-border p-4 md:p-5 hover-glow bg-card transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden h-full";
 
-    if (item.link) {
+    // If has slug, link to individual post page
+    if (item.slug) {
       return (
-        <a 
+        <Link 
           key={item.id} 
-          href={item.link} 
-          target="_blank" 
-          rel="noopener noreferrer"
+          to={`/earn/${item.slug}`}
           className={cardClasses}
         >
           {cardContent}
-        </a>
+        </Link>
       );
     }
 
