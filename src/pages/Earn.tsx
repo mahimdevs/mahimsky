@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from '@/lib/supabase';
 import { Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
@@ -109,8 +110,28 @@ const Earn = () => {
     );
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Earn - Mahimsky",
+    "description": "Discover ways to earn rewards, coins, and exclusive items on Mahimsky.",
+    "url": "https://mahimsky.lovable.app/earn",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Mahimsky",
+      "url": "https://mahimsky.lovable.app"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="Earn - Rewards & Opportunities"
+        description="Discover ways to earn rewards, coins, and exclusive items on Mahimsky. Participate in activities and challenges to unlock earnings."
+        keywords="mahimsky earn, crypto rewards, earn coins, gaming rewards, web3 earning, passive income crypto"
+        canonicalPath="/earn"
+        structuredData={structuredData}
+      />
       <Header />
       <main className="container py-8 md:py-12 px-3 md:px-4 flex-1">
         <div className="text-center mb-8 md:mb-12">

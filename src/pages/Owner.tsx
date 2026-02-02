@@ -1,6 +1,7 @@
 import { Globe, Code, Lightbulb, TrendingUp, Target } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import mahimPhoto from "@/assets/mahim-sky-photo.jpg";
 
 const Owner = () => {
@@ -27,8 +28,25 @@ const Owner = () => {
     }
   ];
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Mahimsky",
+    "url": "https://mahimsky.lovable.app/owner",
+    "description": "Solo entrepreneur and creator of Mahimsky platform, building sustainable online income streams.",
+    "image": "https://mahimsky.lovable.app/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png",
+    "jobTitle": "Entrepreneur & Web Creator"
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="About Mahimsky - Creator & Entrepreneur"
+        description="Learn about Mahimsky, the solo entrepreneur building sustainable online income streams through web experiments, tools, and digital products."
+        keywords="mahimsky owner, about mahimsky, web creator, entrepreneur, digital products, online business"
+        canonicalPath="/owner"
+        structuredData={structuredData}
+      />
       <Header />
       
       <main className="flex-1">
