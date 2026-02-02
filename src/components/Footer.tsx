@@ -5,9 +5,8 @@ const Footer = () => {
 
   const quickLinks = [
     { name: "Home", path: "/" },
-    { name: "Tools", path: "/tools" },
-    { name: "Experiments", path: "/experiments" },
     { name: "Earn", path: "/earn" },
+    { name: "Experiments", path: "/experiments" },
     { name: "Investments", path: "/investments" },
     { name: "About Mahimsky", path: "/owner" },
   ];
@@ -20,7 +19,7 @@ const Footer = () => {
           <div className="text-center sm:text-left" itemScope itemType="https://schema.org/Organization">
             <h3 className="text-base md:text-lg font-bold text-foreground mb-2 md:mb-3" itemProp="name">Mahimsky</h3>
             <p className="text-xs md:text-sm text-muted-foreground leading-relaxed" itemProp="description">
-              A digital platform by Mahimsky – building sustainable online assets, free tools, and resources for earning on the web.
+              A digital platform by Mahimsky – building sustainable online assets and resources for earning on the web.
             </p>
             <meta itemProp="url" content="https://mahimsky.lovable.app" />
           </div>

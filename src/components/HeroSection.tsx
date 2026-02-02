@@ -21,7 +21,7 @@ const HeroSection = () => {
 
         {/* Subtitle with H2 for SEO hierarchy */}
         <h2 className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-xs sm:max-w-md md:max-w-2xl mx-auto mb-4 md:mb-6 leading-relaxed px-2 font-normal">
-          Your Digital Platform for Real Earning Experiments & Free Tools
+          Your Digital Platform for Real Earning Experiments & Investments
         </h2>
 
         {/* Supporting line with brand context */}
