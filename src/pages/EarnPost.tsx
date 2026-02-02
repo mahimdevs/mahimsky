@@ -39,7 +39,7 @@ const EarnPostPage = () => {
           .from('earn')
           .select('*')
           .eq('slug', slug)
-          .single();
+          .maybeSingle();
         
         if (error) throw error;
         setPost(data);
