@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { Coins, Beaker } from "lucide-react";
+
 const HeroSection = () => {
   return (
     <section className="relative min-h-[50vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden scanlines" aria-label="Mahimsky Hero Section">
@@ -22,12 +25,30 @@ const HeroSection = () => {
         </h2>
 
         {/* Supporting line with brand context */}
-        <p className="text-xs sm:text-sm text-muted-foreground/70 max-w-xs sm:max-w-md md:max-w-xl mx-auto font-medium px-2">
+        <p className="text-xs sm:text-sm text-muted-foreground/70 max-w-xs sm:max-w-md md:max-w-xl mx-auto font-medium px-2 mb-8 md:mb-10">
           No hype. No fake promises. Just real building and learning in public with Mahimsky.
         </p>
 
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-8 md:mb-12">
+          <Link 
+            to="/earn" 
+            className="pixel-border bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 font-pixel text-xs md:text-sm transition-all hover:scale-105 hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] flex items-center gap-2"
+          >
+            <Coins className="w-4 h-4" />
+            Start Earning
+          </Link>
+          <Link 
+            to="/experiments" 
+            className="pixel-border bg-transparent hover:bg-accent/10 text-foreground px-6 py-3 font-pixel text-xs md:text-sm transition-all hover:scale-105 border-2 border-accent flex items-center gap-2"
+          >
+            <Beaker className="w-4 h-4" />
+            See Experiments
+          </Link>
+        </div>
+
         {/* Decorative pixel elements */}
-        <div className="flex justify-center gap-2 mt-8 md:mt-12" aria-hidden="true">
+        <div className="flex justify-center gap-2" aria-hidden="true">
           <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary/60"></span>
           <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-accent/60"></span>
           <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-neon-orange/60"></span>
