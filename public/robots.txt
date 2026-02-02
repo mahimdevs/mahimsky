@@ -1,5 +1,5 @@
 # Mahimsky Robots.txt
-# https://mahimsky.lovable.app
+# https://mahimsky.online
 
 User-agent: Googlebot
 Allow: /
@@ -20,7 +20,7 @@ Allow: /
 Crawl-delay: 2
 
 # Sitemap location
-Sitemap: https://mahimsky.lovable.app/sitemap.xml
+Sitemap: https://mahimsky.online/sitemap.xml
 
 # Canonical domain
-Host: https://mahimsky.lovable.app
+Host: https://mahimsky.online

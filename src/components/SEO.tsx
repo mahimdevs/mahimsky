@@ -15,11 +15,11 @@ const SEO = ({
   description,
   keywords = 'mahimsky, crypto, gaming, blockchain, web3',
   canonicalPath = '/',
-  ogImage = 'https://mahimsky.lovable.app/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png',
+  ogImage = 'https://mahimsky.online/lovable-uploads/8ba2b6ae-51fe-4869-af49-8e01459836f3.png',
   ogType = 'website',
   structuredData
 }: SEOProps) => {
-  const baseUrl = 'https://mahimsky.lovable.app';
+  const baseUrl = 'https://mahimsky.online';
   const fullUrl = `${baseUrl}${canonicalPath}`;
   const fullTitle = title.includes('Mahimsky') ? title : `${title} | Mahimsky`;
 
