@@ -6,7 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Earn from "./pages/Earn";
+import EarnPost from "./pages/EarnPost";
 import Experiments from "./pages/Experiments";
+import ExperimentPost from "./pages/ExperimentPost";
 import Owner from "./pages/Owner";
 import Investments from "./pages/Investments";
 import InvestmentsAdmin from "./pages/InvestmentsAdmin";
@@ -26,7 +28,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/earn" element={<Earn />} />
+            <Route path="/earn/:slug" element={<EarnPost />} />
             <Route path="/experiments" element={<Experiments />} />
+            <Route path="/experiments/:slug" element={<ExperimentPost />} />
             <Route path="/owner" element={<Owner />} />
             <Route path="/investments" element={<Investments />} />
             <Route path="/investments/admin" element={<InvestmentsAdmin />} />

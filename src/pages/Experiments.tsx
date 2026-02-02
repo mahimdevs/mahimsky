@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { supabase } from '@/lib/supabase';
-import { FlaskConical, Beaker, TestTube, Atom, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
+import { FlaskConical, Beaker, TestTube, Atom, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ArrowRight } from "lucide-react";
 
 interface Experiment {
   id?: string;
@@ -12,6 +13,7 @@ interface Experiment {
   status: 'live' | 'testing' | 'coming';
   imageUrl?: string;
   link?: string;
+  slug?: string;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -69,30 +71,36 @@ const Experiments = () => {
             {statusLabels[exp.status]}
           </span>
         </div>
-        <div className="flex items-center gap-2 mb-2">
-          <h3 className="font-pixel text-[10px] md:text-sm break-words overflow-hidden">{exp.title}</h3>
-          {exp.link && <ExternalLink className="w-2.5 h-2.5 md:w-3 md:h-3 text-muted-foreground flex-shrink-0" />}
-        </div>
+        <h3 className="font-pixel text-[10px] md:text-sm break-words overflow-hidden mb-2">{exp.title}</h3>
         <p className="text-xs md:text-sm text-muted-foreground break-words overflow-hidden line-clamp-3">{exp.description}</p>
+        
+        {/* Footer */}
+        <div className="mt-3 md:mt-4 pt-2 md:pt-3 border-t border-border/50">
+          <span className="text-[10px] md:text-xs text-primary font-medium flex items-center gap-1">
+            Read more
+            <ArrowRight className="w-2.5 h-2.5 md:w-3 md:h-3" />
+          </span>
+        </div>
       </div>
     );
 
-    if (exp.link) {
+    const cardClasses = "group pixel-border p-4 md:p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden";
+
+    // If has slug, link to individual post page
+    if (exp.slug) {
       return (
-        <a 
+        <Link 
           key={exp.id} 
-          href={exp.link} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="pixel-border p-4 md:p-6 hover-glow block transition-transform hover:scale-[1.02] overflow-hidden"
+          to={`/experiments/${exp.slug}`}
+          className={cardClasses}
         >
           {cardContent}
-        </a>
+        </Link>
       );
     }
 
     return (
-      <div key={exp.id} className="pixel-border p-4 md:p-6 hover-glow overflow-hidden">
+      <div key={exp.id} className={cardClasses}>
         {cardContent}
       </div>
     );
