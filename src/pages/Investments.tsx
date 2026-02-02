@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useBinancePrices } from "@/hooks/useBinancePrices";
 import { useInvestments, Investment } from "@/hooks/useInvestments";
 import { 
@@ -75,8 +76,28 @@ const Investments = () => {
     }).format(value);
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Investments - Mahimsky",
+    "description": "Track Mahimsky's transparent investment portfolio with real-time crypto prices and performance data.",
+    "url": "https://mahimsky.lovable.app/investments",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Mahimsky",
+      "url": "https://mahimsky.lovable.app"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Investments - Portfolio & Performance"
+        description="Track Mahimsky's transparent investment portfolio with real-time crypto prices. View performance data, profit/loss calculations, and investment strategies."
+        keywords="mahimsky investments, crypto portfolio, investment tracker, real-time prices, bitcoin investment, cryptocurrency performance"
+        canonicalPath="/investments"
+        structuredData={structuredData}
+      />
       <Header />
       
       <main className="container px-4 py-12">

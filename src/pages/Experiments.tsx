@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from '@/lib/supabase';
 import { FlaskConical, Beaker, TestTube, Atom, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Calculator, Map, Sword, Wrench, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
@@ -97,8 +98,28 @@ const Experiments = () => {
     );
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Experiments - Mahimsky",
+    "description": "Explore beta features, test new mechanics, and help shape the future of Mahimsky.",
+    "url": "https://mahimsky.lovable.app/experiments",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Mahimsky",
+      "url": "https://mahimsky.lovable.app"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="Experiments - Beta Features & Testing"
+        description="Explore Mahimsky's experimental features and beta projects. Test new mechanics and help shape the future of our platform."
+        keywords="mahimsky experiments, beta features, crypto testing, web3 experiments, blockchain beta"
+        canonicalPath="/experiments"
+        structuredData={structuredData}
+      />
       <Header />
       <main className="container py-8 md:py-12 px-3 md:px-4 flex-1">
         <div className="text-center mb-8 md:mb-12">

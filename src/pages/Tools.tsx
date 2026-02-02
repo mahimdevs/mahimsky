@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { supabase } from '@/lib/supabase';
 import { Wrench, Calculator, Map, Sword, Coins, Gift, Trophy, Zap, Clock, DollarSign, Star, Target, Beaker, TestTube, Atom, FlaskConical, Rocket, Crown, Heart, Shield, Gem, Wallet, CreditCard, PiggyBank, ExternalLink } from "lucide-react";
 
@@ -82,8 +83,28 @@ const Tools = () => {
     );
   };
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Tools - Mahimsky",
+    "description": "Useful utilities, calculators, and resources for crypto gaming and Web3.",
+    "url": "https://mahimsky.lovable.app/tools",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Mahimsky",
+      "url": "https://mahimsky.lovable.app"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <SEO
+        title="Tools - Calculators & Utilities"
+        description="Explore Mahimsky's collection of useful tools, calculators, and utilities for crypto gaming and Web3. Enhance your experience with our free resources."
+        keywords="mahimsky tools, crypto calculator, gaming utilities, web3 tools, blockchain resources"
+        canonicalPath="/tools"
+        structuredData={structuredData}
+      />
       <Header />
       <main className="container py-8 md:py-12 px-3 md:px-4 flex-1">
         <div className="text-center mb-8 md:mb-12">
