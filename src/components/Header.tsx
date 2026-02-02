@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Coins, FlaskConical, Wrench, User, TrendingUp, Home } from "lucide-react";
+import { Menu, X, Coins, FlaskConical, User, TrendingUp, Home } from "lucide-react";
 
 const navLinks = [{
   label: "Earn",
@@ -13,19 +13,14 @@ const navLinks = [{
   slot: 2,
   Icon: FlaskConical
 }, {
-  label: "Tools",
-  href: "/tools",
-  slot: 3,
-  Icon: Wrench
-}, {
   label: "Investments",
   href: "/investments",
-  slot: 4,
+  slot: 3,
   Icon: TrendingUp
 }, {
   label: "Owner",
   href: "/owner",
-  slot: 5,
+  slot: 4,
   Icon: User
 }];
 
