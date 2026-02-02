@@ -7,7 +7,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Earn from "./pages/Earn";
 import Experiments from "./pages/Experiments";
-import Tools from "./pages/Tools";
 import Owner from "./pages/Owner";
 import Investments from "./pages/Investments";
 import InvestmentsAdmin from "./pages/InvestmentsAdmin";
@@ -28,7 +27,6 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/earn" element={<Earn />} />
             <Route path="/experiments" element={<Experiments />} />
-            <Route path="/tools" element={<Tools />} />
             <Route path="/owner" element={<Owner />} />
             <Route path="/investments" element={<Investments />} />
             <Route path="/investments/admin" element={<InvestmentsAdmin />} />
