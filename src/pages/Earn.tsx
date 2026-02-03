@@ -47,7 +47,7 @@ const Earn = () => {
         {/* Image/Icon Header */}
         <div className="relative mb-3 md:mb-4">
           {item.imageUrl ? (
-            <div className="w-full h-24 md:h-32 rounded-sm overflow-hidden bg-muted/50">
+            <div className="w-full aspect-square rounded-sm overflow-hidden bg-muted/50">
               <img 
                 src={item.imageUrl} 
                 alt={item.title} 
@@ -62,7 +62,7 @@ const Earn = () => {
               </div>
             </div>
           ) : (
-            <div className="w-full h-24 md:h-32 rounded-sm bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+            <div className="w-full aspect-square rounded-sm bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
               <IconComponent className="w-10 h-10 md:w-12 md:h-12 text-primary transition-transform duration-300 group-hover:scale-110" />
             </div>
           )}
