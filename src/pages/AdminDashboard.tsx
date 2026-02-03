@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { Pencil, Trash2, Plus, LogOut, ExternalLink, ImageIcon } from 'lucide-react';
+import { Pencil, Trash2, Plus, LogOut, ExternalLink, ImageIcon, Send, MessageCircle, Twitter, Youtube, Instagram, Music, Facebook, Linkedin, Github, Globe } from 'lucide-react';
 import ImageUpload from '@/components/ImageUpload';
 
 interface EarnItem {
@@ -43,11 +43,37 @@ interface Experiment {
   content?: string;
 }
 
+interface SocialLink {
+  id?: string;
+  platform: string;
+  icon: string;
+  url: string;
+  enabled: boolean;
+  sort_order: number;
+}
+
 const ICON_OPTIONS = [
   'Zap', 'Clock', 'DollarSign', 'Star', 'Target', 'Gift', 'Trophy', 'Coins',
   'Calculator', 'Map', 'Sword', 'Wrench', 'Beaker', 'TestTube', 'Atom', 'FlaskConical',
   'Rocket', 'Crown', 'Heart', 'Shield', 'Gem', 'Wallet', 'CreditCard', 'PiggyBank'
 ];
+
+const SOCIAL_ICON_OPTIONS = [
+  { value: 'Send', label: 'Telegram' },
+  { value: 'MessageCircle', label: 'WhatsApp' },
+  { value: 'Twitter', label: 'X / Twitter' },
+  { value: 'Youtube', label: 'YouTube' },
+  { value: 'Instagram', label: 'Instagram' },
+  { value: 'Music', label: 'TikTok' },
+  { value: 'Facebook', label: 'Facebook' },
+  { value: 'Linkedin', label: 'LinkedIn' },
+  { value: 'Github', label: 'GitHub' },
+  { value: 'Globe', label: 'Website' },
+];
+
+const socialIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Send, MessageCircle, Twitter, Youtube, Instagram, Music, Facebook, Linkedin, Github, Globe
+};
 
 const AdminDashboard = () => {
   const { user, loading: authLoading, logout } = useAuth();
@@ -57,16 +83,19 @@ const AdminDashboard = () => {
   const [earnItems, setEarnItems] = useState<EarnItem[]>([]);
   const [tools, setTools] = useState<Tool[]>([]);
   const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form states
   const [editingEarn, setEditingEarn] = useState<EarnItem | null>(null);
   const [editingTool, setEditingTool] = useState<Tool | null>(null);
   const [editingExperiment, setEditingExperiment] = useState<Experiment | null>(null);
+  const [editingSocial, setEditingSocial] = useState<SocialLink | null>(null);
 
   const [earnForm, setEarnForm] = useState<EarnItem>({ title: '', description: '', icon: 'Coins', imageUrl: '', link: '', slug: '', content: '' });
   const [toolForm, setToolForm] = useState<Tool>({ title: '', description: '', icon: 'Wrench', imageUrl: '', link: '' });
   const [experimentForm, setExperimentForm] = useState<Experiment>({ title: '', description: '', status: 'coming', imageUrl: '', link: '', slug: '', content: '' });
+  const [socialForm, setSocialForm] = useState<SocialLink>({ platform: '', icon: 'Send', url: '', enabled: true, sort_order: 0 });
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -82,19 +111,22 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [earnRes, toolsRes, experimentsRes] = await Promise.all([
+      const [earnRes, toolsRes, experimentsRes, socialRes] = await Promise.all([
         supabase.from('earn').select('*'),
         supabase.from('tools').select('*'),
         supabase.from('experiments').select('*'),
+        supabase.from('social_links').select('*').order('sort_order', { ascending: true }),
       ]);
 
       if (earnRes.error) throw earnRes.error;
       if (toolsRes.error) throw toolsRes.error;
       if (experimentsRes.error) throw experimentsRes.error;
-
+      // Social links might not exist yet, so we handle that gracefully
+      
       setEarnItems(earnRes.data || []);
       setTools(toolsRes.data || []);
       setExperiments(experimentsRes.data || []);
+      setSocialLinks(socialRes.data || []);
     } catch (error) {
       toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' });
     } finally {
@@ -250,6 +282,56 @@ const AdminDashboard = () => {
     }
   };
 
+  // Social Links CRUD
+  const saveSocialLink = async () => {
+    if (!socialForm.platform || !socialForm.icon) return;
+    try {
+      const data = { 
+        platform: socialForm.platform, 
+        icon: socialForm.icon,
+        url: normalizeUrl(socialForm.url || ''),
+        enabled: socialForm.enabled,
+        sort_order: socialForm.sort_order
+      };
+      if (editingSocial?.id) {
+        const { error } = await supabase.from('social_links').update(data).eq('id', editingSocial.id);
+        if (error) throw error;
+        toast({ title: 'Success', description: 'Social link updated' });
+      } else {
+        const { error } = await supabase.from('social_links').insert(data);
+        if (error) throw error;
+        toast({ title: 'Success', description: 'Social link created' });
+      }
+      setSocialForm({ platform: '', icon: 'Send', url: '', enabled: true, sort_order: 0 });
+      setEditingSocial(null);
+      fetchData();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to save social link', variant: 'destructive' });
+    }
+  };
+
+  const deleteSocialLink = async (id: string) => {
+    try {
+      const { error } = await supabase.from('social_links').delete().eq('id', id);
+      if (error) throw error;
+      toast({ title: 'Success', description: 'Social link deleted' });
+      fetchData();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to delete social link', variant: 'destructive' });
+    }
+  };
+
+  const toggleSocialEnabled = async (link: SocialLink) => {
+    try {
+      const { error } = await supabase.from('social_links').update({ enabled: !link.enabled }).eq('id', link.id);
+      if (error) throw error;
+      toast({ title: 'Success', description: `${link.platform} ${!link.enabled ? 'enabled' : 'disabled'}` });
+      fetchData();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to update social link', variant: 'destructive' });
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -278,7 +360,7 @@ const AdminDashboard = () => {
 
       <main className="container py-8">
         <Tabs defaultValue="earn" className="space-y-8">
-          <TabsList className="font-pixel text-xs grid w-full grid-cols-3 h-12">
+          <TabsList className="font-pixel text-xs grid w-full grid-cols-4 h-12">
             <TabsTrigger value="earn" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               EARN
             </TabsTrigger>
@@ -287,6 +369,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="experiments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               EXPERIMENTS
+            </TabsTrigger>
+            <TabsTrigger value="social" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              SOCIAL
             </TabsTrigger>
           </TabsList>
 
@@ -663,6 +748,128 @@ const AdminDashboard = () => {
               {experiments.length === 0 && (
                 <div className="pixel-border bg-card/50 p-8 text-center">
                   <p className="text-muted-foreground text-sm">No experiments yet. Add your first one above!</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+
+          {/* Social Links Tab */}
+          <TabsContent value="social" className="space-y-6">
+            <div className="pixel-border bg-card p-6">
+              <h2 className="font-pixel text-sm mb-6 flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                {editingSocial ? 'EDIT SOCIAL LINK' : 'ADD SOCIAL LINK'}
+              </h2>
+              <div className="grid gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs">Platform Name</Label>
+                    <Input
+                      value={socialForm.platform}
+                      onChange={(e) => setSocialForm({ ...socialForm, platform: e.target.value })}
+                      placeholder="Telegram"
+                      className="bg-background"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs">Icon</Label>
+                    <Select value={socialForm.icon} onValueChange={(v) => setSocialForm({ ...socialForm, icon: v })}>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SOCIAL_ICON_OPTIONS.map(opt => (
+                          <SelectItem key={opt.value} value={opt.value}>
+                            <div className="flex items-center gap-2">
+                              {(() => { const Icon = socialIconMap[opt.value]; return Icon ? <Icon className="w-4 h-4" /> : null; })()}
+                              {opt.label}
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs flex items-center gap-2">
+                      <ExternalLink className="w-3 h-3" /> Link URL
+                    </Label>
+                    <Input
+                      value={socialForm.url}
+                      onChange={(e) => setSocialForm({ ...socialForm, url: e.target.value })}
+                      placeholder="https://t.me/yourgroup"
+                      className="bg-background"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="font-pixel text-xs">Sort Order</Label>
+                    <Input
+                      type="number"
+                      value={socialForm.sort_order}
+                      onChange={(e) => setSocialForm({ ...socialForm, sort_order: parseInt(e.target.value) || 0 })}
+                      placeholder="0"
+                      className="bg-background"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-2 mt-6">
+                <Button onClick={saveSocialLink} className="font-pixel text-xs gap-2">
+                  <Plus className="w-4 h-4" />
+                  {editingSocial ? 'UPDATE' : 'ADD'}
+                </Button>
+                {editingSocial && (
+                  <Button variant="outline" onClick={() => { setEditingSocial(null); setSocialForm({ platform: '', icon: 'Send', url: '', enabled: true, sort_order: 0 }); }} className="font-pixel text-xs">
+                    Cancel
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-pixel text-xs text-muted-foreground">SOCIAL LINKS ({socialLinks.length})</h3>
+              {socialLinks.map((link) => {
+                const IconComponent = socialIconMap[link.icon] || Globe;
+                return (
+                  <div key={link.id} className="pixel-border bg-card p-4 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${link.enabled ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground'}`}>
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-pixel text-xs truncate">{link.platform}</h3>
+                          <span className={`text-[10px] px-2 py-0.5 rounded ${link.enabled ? 'bg-green-500/20 text-green-400' : 'bg-muted text-muted-foreground'}`}>
+                            {link.enabled ? 'ON' : 'OFF'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground truncate">{link.url || 'No URL set'}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button 
+                        size="icon" 
+                        variant={link.enabled ? "default" : "outline"} 
+                        className="h-8 w-8" 
+                        onClick={() => link.id && toggleSocialEnabled(link)}
+                        title={link.enabled ? 'Disable' : 'Enable'}
+                      >
+                        {link.enabled ? '✓' : '○'}
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => { setEditingSocial(link); setSocialForm(link); }}>
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => link.id && deleteSocialLink(link.id)}>
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+              {socialLinks.length === 0 && (
+                <div className="pixel-border bg-card/50 p-8 text-center">
+                  <p className="text-muted-foreground text-sm">No social links yet. Add your first one above!</p>
                 </div>
               )}
             </div>
