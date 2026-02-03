@@ -34,12 +34,38 @@ const EarnPostPage = () => {
     const fetchPost = async () => {
       if (!slug) return;
       
+      // Decode the URL-encoded slug for matching
+      const decodedSlug = decodeURIComponent(slug);
+      
       try {
-        const { data, error } = await supabase
+        // First try exact match with the slug
+        let { data, error } = await supabase
           .from('earn')
           .select('*')
           .eq('slug', slug)
           .maybeSingle();
+        
+        // If not found, try with decoded slug (in case slug contains special chars)
+        if (!data && !error) {
+          const result = await supabase
+            .from('earn')
+            .select('*')
+            .eq('slug', decodedSlug)
+            .maybeSingle();
+          data = result.data;
+          error = result.error;
+        }
+        
+        // Also try matching by title if slug doesn't work (legacy support)
+        if (!data && !error) {
+          const result = await supabase
+            .from('earn')
+            .select('*')
+            .eq('title', decodedSlug)
+            .maybeSingle();
+          data = result.data;
+          error = result.error;
+        }
         
         if (error) throw error;
         setPost(data);
