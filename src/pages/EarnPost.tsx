@@ -197,17 +197,17 @@ const EarnPostPage = () => {
               
               {/* Image - Full Width on Mobile, Centered */}
               {post.imageUrl ? (
-                <div className="w-full aspect-video md:aspect-[21/9] rounded-lg overflow-hidden mb-6 ring-1 ring-border/50">
+                <div className="w-full aspect-square rounded-lg overflow-hidden mb-6 ring-1 ring-border/50">
                   <img 
                     src={post.imageUrl} 
                     alt={post.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
               ) : (
-                <div className="w-full aspect-video md:aspect-[21/9] rounded-lg bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 flex items-center justify-center mb-6 ring-1 ring-border/50">
+                <div className="w-full aspect-square rounded-lg bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 flex items-center justify-center mb-6 ring-1 ring-border/50">
                   <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-primary/60" />
                 </div>
               )}
