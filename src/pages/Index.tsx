@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import LiveStatsWidget from "@/components/LiveStatsWidget";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import SocialSidebar from "@/components/SocialSidebar";
 
 const Index = () => {
   const structuredData = {
@@ -30,6 +31,7 @@ const Index = () => {
         <LiveStatsWidget />
       </main>
       <Footer />
+      <SocialSidebar />
     </div>
   );
 };
