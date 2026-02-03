@@ -178,48 +178,62 @@ const EarnPostPage = () => {
         </nav>
 
         <article className="max-w-3xl mx-auto">
-          {/* Hero Section */}
-          <header className="pixel-border bg-card p-6 md:p-8 mb-8">
-            <div className="flex flex-col md:flex-row gap-6">
-              {/* Image */}
+          {/* Hero Section - Enhanced */}
+          <header className="relative overflow-hidden pixel-border bg-gradient-to-br from-card via-card to-primary/5 mb-8">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-5">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary))_1px,transparent_1px)] bg-[length:20px_20px]" />
+            </div>
+            
+            {/* Main Content */}
+            <div className="relative p-5 md:p-8">
+              {/* Category Badge */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+                  <IconComponent className="w-3 h-3" />
+                  Earn Opportunity
+                </span>
+              </div>
+              
+              {/* Image - Full Width on Mobile, Centered */}
               {post.imageUrl ? (
-                <div className="w-full md:w-48 h-48 md:h-48 flex-shrink-0 rounded-lg overflow-hidden">
+                <div className="w-full aspect-video md:aspect-[21/9] rounded-lg overflow-hidden mb-6 ring-1 ring-border/50">
                   <img 
                     src={post.imageUrl} 
                     alt={post.title}
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
               ) : (
-                <div className="w-full md:w-48 h-48 md:h-48 flex-shrink-0 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
-                  <IconComponent className="w-16 h-16 text-primary" />
+                <div className="w-full aspect-video md:aspect-[21/9] rounded-lg bg-gradient-to-br from-primary/10 via-accent/5 to-primary/10 flex items-center justify-center mb-6 ring-1 ring-border/50">
+                  <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-primary/60" />
                 </div>
               )}
               
-              {/* Title & CTA */}
-              <div className="flex-1 flex flex-col justify-between">
-                <div>
-                  <h1 className="font-pixel text-lg md:text-2xl lg:text-3xl text-foreground mb-3 leading-relaxed">
-                    {post.title}
-                  </h1>
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                    {post.description}
-                  </p>
-                </div>
-                
-                {post.link && (
-                  <a 
-                    href={post.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-105 font-medium w-fit"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Visit Link
-                  </a>
-                )}
-              </div>
+              {/* Title */}
+              <h1 className="font-pixel text-base md:text-xl lg:text-2xl text-foreground mb-3 leading-relaxed">
+                {post.title}
+              </h1>
+              
+              {/* Description */}
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6">
+                {post.description}
+              </p>
+              
+              {/* CTA Button */}
+              {post.link && (
+                <a 
+                  href={post.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/20 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4 transition-transform group-hover:rotate-12" />
+                  Visit Link
+                </a>
+              )}
             </div>
           </header>
 
