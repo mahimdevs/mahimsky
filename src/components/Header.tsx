@@ -49,7 +49,7 @@ const Header = () => {
             <img 
               alt="MahimSky" 
               className="header-logo-img h-8 md:h-10" 
-              src="/favicon.ico"
+              src="/logo.png"
               width="60"
               height="40"
               loading="eager"
