@@ -48,7 +48,7 @@ const Header = () => {
           <Link to="/" className="header-logo-link group">
             <img 
               alt="MahimSky" 
-              className="header-logo-img h-10 md:h-13 rounded bg-[hsl(var(--background))] p-0.5" 
+              className="header-logo-img h-10 md:h-13" 
               src="/logo.png"
               width="78"
               height="52"
